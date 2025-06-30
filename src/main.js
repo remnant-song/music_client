@@ -1,6 +1,19 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from "vue";
+import App from "./App.vue";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
+import axios from "axios";
+import VUEAxios from "vue-axios";
+import "./assets/reset.css";
 
-createApp(App).use(store).use(router).mount('#app')
+
+import "swiper/css";
+import router from "./router";
+
+
+const app = createApp(App);
+
+app.use(router);
+app.use(ElementPlus);
+app.use(VUEAxios, axios);
+app.mount("#app");
