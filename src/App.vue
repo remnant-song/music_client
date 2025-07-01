@@ -10,15 +10,18 @@
       </keep-alive>
     </router-view>
   </el-main>
+    <!--播放器全局组件-->
+  <Player />
 </template>
 
 <script>
 import NavMenu from '@/components/NavMenu.vue'  // 根据你的路径调整
-
+import Player from "./components/Player.vue";
 export default {
   name: "App",
   components: {
     NavMenu,
+    Player
   },
   provide() {
     return {

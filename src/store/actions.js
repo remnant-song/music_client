@@ -40,3 +40,36 @@ export const selectPlay = ({ commit, state }, { list, index }) => {
     // 设置播放状态 播放 or 暂停
     commit(types.SET_PLAYING_STATE, true);
   };
+  // 添加到我喜欢的音乐
+export const addLikeSong = ({ commit }, musicId) => {
+  addLikeMusic(musicId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: "收藏成功",
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
+  });
+};
+
+// 移除我喜欢的歌曲
+export const removeLikeMusic = ({ commit }, musicId) => {
+  removeMyLikeMusic(musicId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        // type: "success",
+        message: "已取消收藏",
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
+  });
+};
