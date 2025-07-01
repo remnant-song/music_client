@@ -10,10 +10,11 @@ import "./assets/reset.css";
 import "swiper/css";
 import router from "./router";
 
-
+import store from "./store";
 const app = createApp(App);
 
 app.use(router);
 app.use(ElementPlus);
 app.use(VUEAxios, axios);
+app.use(store);
 app.mount("#app");
