@@ -4,6 +4,9 @@ import { playMode } from "../common/config";
 import { getSongListRank } from '@/api/rank';
 import { getRecommendSinger } from "@/api/singer";
 import { getSongsByRank } from '@/api/rank'
+
+import { getRecommendList } from '@/api/songlist'
+
 import {
   getSongDetailByMusicId,
 } from "../api/songlist";
@@ -102,5 +105,45 @@ export const gainSongBySingerId = ({ commit }, singerId) => {
 export const gainSongsByRank = ({ commit }, param) => {
   getSongsByRank(param).then((res) => {
     commit(types.SET_SONGS_BY_RANK, res.data.list);
+  });
+};
+
+
+// 获取推荐歌单列表
+export const gainRecommendList = ({ commit }) => {
+  getRecommendList().then((res) => {
+    commit(types.SET_RECOMMEND_LIST, res.data.list);
+  });
+};
+// 根据歌单id获取歌单信息详情
+export const gainSongListDetail = ({ commit }, listId) => {
+  getSongListDetail(listId).then((res) => {
+    if (res.code == "50") {
+      commit(types.SET_LEST_MESSAGE, {});
+      commit(types.SET_MUSIC_LIST, []);
+      ElMessage({
+        type: "error",
+        message: "歌单已删除，请将该歌单移除收藏列表",
+      });
+    } else {
+      commit(types.SET_LEST_MESSAGE, res.data.listMessage);
+      commit(types.SET_MUSIC_LIST, res.data.musicList);
+    }
+  });
+};
+// 收藏歌单
+export const collectMusicList = ({ commit }, listId) => {
+  collectSongList(listId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (code == "50") {
+      ElMessage({
+        type: "error",
+        message: "收藏失败",
+      });
+    }
   });
 };

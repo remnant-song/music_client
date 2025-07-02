@@ -49,6 +49,14 @@ const state = {
   SongListRank: {},
     // 根据关键字查询各类排行榜下的歌曲
   songsByRank: [],
+
+
+    // 推荐歌单
+  recommendList: [],
+    // 根据id拿到歌单信息
+  listMessage: {},
+  // 根据歌单id拿到歌曲详细信息
+  musicList: [],
 };
 
 export default state;

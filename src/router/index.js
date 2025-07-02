@@ -33,6 +33,18 @@ const routes = [
     component: () => import("../views/Rank/rankDetail.vue"),
     meta: { title: "排行详情" },
   },
+    {
+    path: "/songlist",
+    name: "songlist",
+    component: () => import("../views/Songlist/index.vue"),
+    meta: { title: "歌单" },
+  },
+    {
+    path: "/songlist/:id",
+    name: "songlistDetail",
+    component: () => import("../views/Songlist/songlistDetail.vue"),
+    meta: { title: "歌单详情" },
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(),

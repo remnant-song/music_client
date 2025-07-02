@@ -20,3 +20,12 @@ export const songDetailBySingerId = (state) => state.songDetailBySingerId || [];
 // export const SongListRank = (state) => state.SongListRank || {};
 // 根据关键字查询各类排行榜下的歌曲
 export const songsByRank = (state) => state.songsByRank || [];
+
+
+// 推荐歌单
+export const recommendList = (state) => state.recommendList || [];
+// 根据id拿到歌单信息
+export const listMessage = (state) => state.listMessage || {};
+
+// 根据歌单id拿到歌曲详细信息
+export const musicList = (state) => state.musicList || [];

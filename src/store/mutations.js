@@ -41,5 +41,19 @@ const mutations = {
   [types.SET_SONGS_BY_RANK](state, songsByRank) {
     state.songsByRank = songsByRank;
   },
+
+
+    // 推荐歌单
+  [types.SET_RECOMMEND_LIST](state, recommendList) {
+    state.recommendList = recommendList;
+  },
+    // 根据id拿到歌单信息
+  [types.SET_LEST_MESSAGE](state, listMessage) {
+    state.listMessage = listMessage;
+  },
+  // 根据歌单id拿到歌曲详细信息
+  [types.SET_MUSIC_LIST](state, musicList) {
+    state.musicList = musicList;
+  },
  }
  export default mutations;
