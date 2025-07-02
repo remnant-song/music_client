@@ -15,6 +15,10 @@ import { collectSongList } from "@/api/songlist";
 import { removeMyLikeMusic } from "@/api/mine";
 import {getSongDetailByMusicId,} from "../api/songlist";
 
+import{toLogin} from "@/api/login";
+import { addLikeMusic } from "@/api/common";
+import{toRegister} from "@/api/login";
+
 
 function findIndex(list, song) {
     return list.findIndex((item) => {
@@ -177,5 +181,56 @@ export const setHeadPic = ({ commit }, iconUrl) => {
         message: res.message,
       });
     }
+  });
+};
+
+
+// 登录
+export const login = ({ commit }, loginInfo) => {
+  return new Promise((resolve, reject) => {
+    toLogin(loginInfo).then((res) => {
+      if (res.code == "20") {
+        ElMessage({
+          type: "success",
+          message: "登录成功",
+        });
+        localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+        localStorage.setItem("token", res.data.token);
+        resolve();
+      } else {
+        if (res.code == "50") {
+          ElMessage({
+            type: "error",
+            message: res.message,
+          });
+        }
+        reject();
+      }
+    });
+  });
+};
+// 注册
+export const register = ({ commit }, registerForm) => {
+  return new Promise((resolve, reject) => {
+    toRegister(
+      registerForm.email,
+      registerForm.phone,
+      registerForm.password,
+      registerForm.role
+    ).then((res) => {
+      if (res.code == "20") {
+        ElMessage({
+          type: "success",
+          message: "注册成功！请查看邮箱并激活账号！",
+        });
+        resolve();
+      } else if (code == "50") {
+        ElMessage({
+          type: "error",
+          message: res.message,
+        });
+        reject();
+      }
+    });
   });
 };

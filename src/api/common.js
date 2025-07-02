@@ -1,3 +1,4 @@
+import request from '@/utils/request'
 export function getLyric(lyricUrl) {
  return axios.get(lyricUrl);
 }
