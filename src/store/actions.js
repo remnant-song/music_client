@@ -2,7 +2,7 @@ import * as types from "./mutation-types";
 import { playMode } from "../common/config";
 
 import { getSongListRank } from '@/api/rank';
-
+import { getRecommendSinger } from "@/api/singer";
 import {
   getSongDetailByMusicId,
 } from "../api/songlist";
@@ -80,5 +80,18 @@ export const removeLikeMusic = ({ commit }, musicId) => {
 export const gainSongListRank = ({ commit }) => {
   getSongListRank().then((res) => {
     commit(types.SET_SONG_LIST_RANK, res.data);
+  });
+};
+
+// 获取推荐歌手
+export const gainRecommendSinger = ({ commit }) => {
+  getRecommendSinger().then((res) => {
+    commit(types.SET_RECOMMEND_SINGER, res.data.list);
+  });
+};
+// 根据歌手id查询歌曲
+export const gainSongBySingerId = ({ commit }, singerId) => {
+  getSongBySingerId(singerId).then((res) => {
+    commit(types.SET_SONG_DETAIL_BY_SINGER_ID, res.data);
   });
 };

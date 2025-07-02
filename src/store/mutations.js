@@ -25,5 +25,12 @@ const mutations = {
     [types.SET_SONG_LIST_RANK](state, SongListRank) {     //24
     state.SongListRank = SongListRank;
   },
+    [types.SET_RECOMMEND_SINGER](state, recommendSinger) {
+    state.recommendSinger = recommendSinger;
+  },
+    // 根据歌手id查询歌曲详情
+  [types.SET_SONG_DETAIL_BY_SINGER_ID](state, songDetailBySingerId) {
+    state.songDetailBySingerId = songDetailBySingerId;
+  },  
  }
  export default mutations;

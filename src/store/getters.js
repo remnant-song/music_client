@@ -11,3 +11,7 @@ export const songDetailByMusicId = (state) => state.songDetailByMusicId || {};
 
 // 获取歌曲排行榜列表（推荐歌曲列表）24
 export const SongListRank = (state) => state.SongListRank || {};
+// 获取推荐歌手
+export const recommendSinger = (state) => state.recommendSinger || [];
+// 根据歌手id查询歌曲详情
+export const songDetailBySingerId = (state) => state.songDetailBySingerId || [];

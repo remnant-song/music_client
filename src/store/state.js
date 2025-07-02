@@ -18,6 +18,11 @@ const state = {
 
   // 获取歌曲排行榜列表（推荐歌曲）24的
   SongListRank: {},
+
+    // 获取推荐歌手
+  recommendSinger: [],
+    // 根据歌手id查询歌曲详情
+  songDetailBySingerId: [],
 };
 
 export default state;
