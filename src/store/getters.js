@@ -8,3 +8,6 @@ export const currentSong = (state) => {
   return state.playList[state.currentIndex] || {};
 };
 export const songDetailByMusicId = (state) => state.songDetailByMusicId || {};
+
+// 获取歌曲排行榜列表（推荐歌曲列表）24
+export const SongListRank = (state) => state.SongListRank || {};

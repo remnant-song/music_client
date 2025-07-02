@@ -1,5 +1,8 @@
 import * as types from "./mutation-types";
 import { playMode } from "../common/config";
+
+import { getSongListRank } from '@/api/rank';
+
 import {
   getSongDetailByMusicId,
 } from "../api/songlist";
@@ -71,5 +74,11 @@ export const removeLikeMusic = ({ commit }, musicId) => {
         message: res.message,
       });
     }
+  });
+};
+//24的
+export const gainSongListRank = ({ commit }) => {
+  getSongListRank().then((res) => {
+    commit(types.SET_SONG_LIST_RANK, res.data);
   });
 };

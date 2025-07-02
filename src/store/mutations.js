@@ -21,6 +21,9 @@ const mutations = {
   },
     [types.SET_SONG_DETAIL_BY_MUSIC_ID](state, songDetailByMusicId) {
     state.songDetailByMusicId = songDetailByMusicId;
-  }
+  },
+    [types.SET_SONG_LIST_RANK](state, SongListRank) {     //24
+    state.SongListRank = SongListRank;
+  },
  }
  export default mutations;

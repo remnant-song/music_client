@@ -29,7 +29,7 @@ module.exports = defineConfig({
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.BASE_URL': JSON.stringify('http://localhost'),
+        'process.env.BASE_URL': JSON.stringify('http://169.254.55.172/8001'),
       }),
     ],
   },
