@@ -9,3 +9,8 @@ export const SET_SONG_DETAIL_BY_MUSIC_ID = "SET_SONG_DETAIL_BY_MUSIC_ID";
 export const SET_RECOMMEND_SINGER = "SET_RECOMMEND_SINGER";
 // 根据歌手id查询歌曲
 export const SET_SONG_DETAIL_BY_SINGER_ID = "SET_SONG_DETAIL_BY_SINGER_ID";
+
+// 获取歌曲排行榜列表
+export const SET_SONG_LIST_RANK = "SET_SONG_LIST_RANK";
+// 根据关键字查询各类排行榜下的歌曲
+export const SET_SONGS_BY_RANK = "SET_SONGS_BY_RANK";

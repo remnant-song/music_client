@@ -3,6 +3,7 @@ import { playMode } from "../common/config";
 
 import { getSongListRank } from '@/api/rank';
 import { getRecommendSinger } from "@/api/singer";
+import { getSongsByRank } from '@/api/rank'
 import {
   getSongDetailByMusicId,
 } from "../api/songlist";
@@ -93,5 +94,13 @@ export const gainRecommendSinger = ({ commit }) => {
 export const gainSongBySingerId = ({ commit }, singerId) => {
   getSongBySingerId(singerId).then((res) => {
     commit(types.SET_SONG_DETAIL_BY_SINGER_ID, res.data);
+  });
+};
+
+
+// 根据关键字查询各类排行榜下的歌曲
+export const gainSongsByRank = ({ commit }, param) => {
+  getSongsByRank(param).then((res) => {
+    commit(types.SET_SONGS_BY_RANK, res.data.list);
   });
 };

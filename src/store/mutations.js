@@ -32,5 +32,14 @@ const mutations = {
   [types.SET_SONG_DETAIL_BY_SINGER_ID](state, songDetailBySingerId) {
     state.songDetailBySingerId = songDetailBySingerId;
   },  
+
+    // 获取歌曲排行榜列表
+  [types.SET_SONG_LIST_RANK](state, SongListRank) {
+    state.SongListRank = SongListRank;
+  },
+    // 根据关键字查询各类排行榜下的歌曲
+  [types.SET_SONGS_BY_RANK](state, songsByRank) {
+    state.songsByRank = songsByRank;
+  },
  }
  export default mutations;

@@ -15,3 +15,8 @@ export const SongListRank = (state) => state.SongListRank || {};
 export const recommendSinger = (state) => state.recommendSinger || [];
 // 根据歌手id查询歌曲详情
 export const songDetailBySingerId = (state) => state.songDetailBySingerId || [];
+
+// // 获取歌曲排行榜列表（推荐歌曲列表）25任务需求，和上面24的相同
+// export const SongListRank = (state) => state.SongListRank || {};
+// 根据关键字查询各类排行榜下的歌曲
+export const songsByRank = (state) => state.songsByRank || [];

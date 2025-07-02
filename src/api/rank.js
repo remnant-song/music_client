@@ -8,3 +8,12 @@ export function getSongListRank() {
     method: "get",
   });
 }
+
+// 根据关键字查询各类排行榜下的歌曲
+export function getSongsByRank(param) {
+  return request({
+    url: "/music/RecommendList",
+    method: "get",
+    params: { param },
+  });
+}
