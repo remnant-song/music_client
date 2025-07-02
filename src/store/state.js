@@ -57,6 +57,10 @@ const state = {
   listMessage: {},
   // 根据歌单id拿到歌曲详细信息
   musicList: [],
+
+
+    // 未读消息条数
+  unReadMsgNum: 0,
 };
 
 export default state;

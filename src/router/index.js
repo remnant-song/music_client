@@ -45,6 +45,12 @@ const routes = [
     component: () => import("../views/Songlist/songlistDetail.vue"),
     meta: { title: "歌单详情" },
   },
+    {
+    path: "/mine",
+    name: "mine",
+    component: () => import("../views/Mine/index.vue"),
+    meta: { title: "我的" },
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(),

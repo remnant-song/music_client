@@ -7,9 +7,13 @@ import { getSongsByRank } from '@/api/rank'
 
 import { getRecommendList } from '@/api/songlist'
 
-import {
-  getSongDetailByMusicId,
-} from "../api/songlist";
+import { setHeadImage } from "@/api/login";
+import{getUnReadMsgNum} from "@/api/message";
+import{modifyAllRead} from "@/api/message";
+import{getUserInfo} from "@/api/mine";
+import { collectSongList } from "@/api/songlist";
+import { removeMyLikeMusic } from "@/api/mine";
+import {getSongDetailByMusicId,} from "../api/songlist";
 
 
 function findIndex(list, song) {
@@ -143,6 +147,34 @@ export const collectMusicList = ({ commit }, listId) => {
       ElMessage({
         type: "error",
         message: "收藏失败",
+      });
+    }
+  });
+};
+
+
+// 获取未读消息条数
+export const gainUnReadMsgNum = ({ commit }) => {
+  getUnReadMsgNum().then((res) => {
+    commit(types.SET_UNREAD_MSG_NUM, res.data.unReadMsg);
+  });
+};
+// 修改消息通知为全部已读状态
+export const modifyAllMsgRead = ({ commit }) => modifyAllRead();
+// 获取用户信息
+export const gainUserInfo = ({}) => {
+  getUserInfo().then((res) => {
+    localStorage.removeItem("userInfo");
+    localStorage.setItem("userInfo", JSON.stringify(res.data.user));
+  });
+};
+// 更新用户头像
+export const setHeadPic = ({ commit }, iconUrl) => {
+  setHeadImage(iconUrl).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
       });
     }
   });

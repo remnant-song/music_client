@@ -55,5 +55,10 @@ const mutations = {
   [types.SET_MUSIC_LIST](state, musicList) {
     state.musicList = musicList;
   },
+
+    // 获取未读消息条数
+  [types.SET_UNREAD_MSG_NUM](state, unReadMsgNum) {
+    state.unReadMsgNum = unReadMsgNum;
+  },
  }
  export default mutations;

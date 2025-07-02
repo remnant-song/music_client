@@ -23,3 +23,6 @@ export const SET_LEST_MESSAGE = "SET_LEST_MESSAG";
 
 // 根据歌单id拿到歌曲详细信息
 export const SET_MUSIC_LIST = "SET_MUSIC_LIST";
+
+// 未读消息条数
+export const SET_UNREAD_MSG_NUM = "SET_UNREAD_MSG_NUM";
