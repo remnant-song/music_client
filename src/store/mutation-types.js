@@ -29,3 +29,6 @@ export const SET_UNREAD_MSG_NUM = "SET_UNREAD_MSG_NUM";
 
 // 我喜欢的音乐
 export const SET_LIKE_MUSIC_LIST = "SET_LIKE_MUSIC_LIST";
+
+// 获取收藏的歌单
+export const SET_COLLECT_SONG_LIST = "SET_COLLECT_SONG_LIST";

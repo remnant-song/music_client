@@ -9,14 +9,16 @@
       />
     </div>
     <MyLike v-if="selectPage == 'likeMusic'" />
+    <CollectList v-if="selectPage == 'collectSongList'" />
   </div>
 </template>
 
 <script>
 import MyLike from  "../MyLike/index.vue";
+import CollectList from "./CollectList/index.vue";
 export default {
   name: "Like",
-  components: { MyLike},
+  components: { MyLike,CollectList},
   data() {
     return {};
   },

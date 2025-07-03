@@ -23,3 +23,12 @@ export function getMyLikeMusic() {
     method: "get",
   });
 }
+
+// 移除收藏的歌单
+export function removeCollectSongList(listId) {
+  return request({
+    url: "/mylike/removeList",
+    method: "post",
+    params: { listId },
+  });
+}

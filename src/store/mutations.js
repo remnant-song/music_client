@@ -66,5 +66,10 @@ const mutations = {
   [types.SET_LIKE_MUSIC_LIST](state, likeMusicList) {
     state.likeMusicList = likeMusicList;
   },
+
+    // 获取收藏的歌单
+  [types.SET_COLLECT_SONG_LIST](state, collectSongList) {
+    state.collectSongList = collectSongList;
+  },
  }
  export default mutations;

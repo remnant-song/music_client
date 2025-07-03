@@ -64,6 +64,9 @@ const state = {
 
     // 我喜欢的音乐列表
   likeMusicList: [],
+
+    // 收藏歌单信息
+  collectSongList: [],
 };
 
 export default state;

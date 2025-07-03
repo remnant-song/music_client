@@ -23,7 +23,8 @@ import { ElMessage } from "element-plus";
 import { getSongListDetail } from "@/api/songlist";
 // import{shuffle} from "../utils";
 import{getMyLikeMusic} from "../api/mine";
-
+import{getCollectSongList} from "../api/songlist";
+import{removeCollectSongList} from "../api/mine";
 function findIndex(list, song) {
     return list.findIndex((item) => {
       return item.id === song.id;
@@ -243,5 +244,28 @@ export const register = ({ commit }, registerForm) => {
 export const gainLikeMusicList = ({ commit }) => {
   getMyLikeMusic().then((res) => {
     commit(types.SET_LIKE_MUSIC_LIST, res.data.likeList);
+  });
+};
+
+// 获取收藏歌单信息
+export const gainCollectSongList = ({ commit }) => {
+  getCollectSongList().then((res) => {
+    commit(types.SET_COLLECT_SONG_LIST, res.data.list);
+  });
+};
+// 移除收藏的歌单
+export const removeCollectMusicList = ({ commit }, listId) => {
+  removeCollectSongList(listId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
   });
 };

@@ -32,3 +32,6 @@ export const musicList = (state) => state.musicList || [];
 
 // 我喜欢的音乐列表
 export const likeMusicList = (state) => state.likeMusicList || [];
+
+// 收藏歌单信息
+export const collectSongList = (state) => state.collectSongList || [];

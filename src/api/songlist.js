@@ -32,3 +32,11 @@ export function collectSongList(listId) {
     params: { listId },
   });
 }
+
+// 获取收藏的歌单
+export function getCollectSongList() {
+  return request({
+    url: "/mylike/getLikeList",
+    method: "get",
+  });
+}
