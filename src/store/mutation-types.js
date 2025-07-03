@@ -26,3 +26,6 @@ export const SET_MUSIC_LIST = "SET_MUSIC_LIST";
 
 // 未读消息条数
 export const SET_UNREAD_MSG_NUM = "SET_UNREAD_MSG_NUM";
+
+// 我喜欢的音乐
+export const SET_LIKE_MUSIC_LIST = "SET_LIKE_MUSIC_LIST";

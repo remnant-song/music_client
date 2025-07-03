@@ -60,5 +60,11 @@ const mutations = {
   [types.SET_UNREAD_MSG_NUM](state, unReadMsgNum) {
     state.unReadMsgNum = unReadMsgNum;
   },
+
+
+    // 我喜欢的音乐
+  [types.SET_LIKE_MUSIC_LIST](state, likeMusicList) {
+    state.likeMusicList = likeMusicList;
+  },
  }
  export default mutations;

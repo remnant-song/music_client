@@ -15,3 +15,11 @@ export function getUserInfo() {
     method: "get",
   });
 }
+
+// 获取我喜欢的音乐
+export function getMyLikeMusic() {
+  return request({
+    url: "/mylike/getMyLike",
+    method: "get",
+  });
+}

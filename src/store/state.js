@@ -61,6 +61,9 @@ const state = {
 
     // 未读消息条数
   unReadMsgNum: 0,
+
+    // 我喜欢的音乐列表
+  likeMusicList: [],
 };
 
 export default state;

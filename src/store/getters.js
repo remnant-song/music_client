@@ -29,3 +29,6 @@ export const listMessage = (state) => state.listMessage || {};
 
 // 根据歌单id拿到歌曲详细信息
 export const musicList = (state) => state.musicList || [];
+
+// 我喜欢的音乐列表
+export const likeMusicList = (state) => state.likeMusicList || [];

@@ -67,6 +67,12 @@ const routes = [
     component: () => import("../views/Mine/Register.vue"),
     meta: { title: "注册" },
   },
+
+    {
+    path: "/mine/list/:value/:title",
+    name: "Like",
+    component: () => import("../views/Mine/MineList.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(),

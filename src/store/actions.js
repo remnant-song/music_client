@@ -22,7 +22,7 @@ import { getSongBySingerId } from "@/api/singer";
 import { ElMessage } from "element-plus";
 import { getSongListDetail } from "@/api/songlist";
 // import{shuffle} from "../utils";
-
+import{getMyLikeMusic} from "../api/mine";
 
 function findIndex(list, song) {
     return list.findIndex((item) => {
@@ -236,5 +236,12 @@ export const register = ({ commit }, registerForm) => {
         reject();
       }
     });
+  });
+};
+
+// 获取我喜欢的音乐列表
+export const gainLikeMusicList = ({ commit }) => {
+  getMyLikeMusic().then((res) => {
+    commit(types.SET_LIKE_MUSIC_LIST, res.data.likeList);
   });
 };
