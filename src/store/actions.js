@@ -18,6 +18,10 @@ import {getSongDetailByMusicId,} from "../api/songlist";
 import{toLogin} from "@/api/login";
 import { addLikeMusic } from "@/api/common";
 import{toRegister} from "@/api/login";
+import { getSongBySingerId } from "@/api/singer";
+import { ElMessage } from "element-plus";
+import { getSongListDetail } from "@/api/songlist";
+// import{shuffle} from "../utils";
 
 
 function findIndex(list, song) {
@@ -147,7 +151,7 @@ export const collectMusicList = ({ commit }, listId) => {
         type: "success",
         message: res.message,
       });
-    } else if (code == "50") {
+    } else if (res.code == "50") {
       ElMessage({
         type: "error",
         message: "收藏失败",
@@ -224,7 +228,7 @@ export const register = ({ commit }, registerForm) => {
           message: "注册成功！请查看邮箱并激活账号！",
         });
         resolve();
-      } else if (code == "50") {
+      } else if (res.code == "50") {
         ElMessage({
           type: "error",
           message: res.message,

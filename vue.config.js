@@ -1,36 +1,28 @@
-// const { defineConfig } = require('@vue/cli-service')
-// module.exports = defineConfig({
-  
-//   lintOnSave:false,
-//   transpileDependencies: true,
-//   devServer: {
-//     host: "0.0.0.0",  
-//     port: "9092", // 代理端口
-  
-//   },  
-//   //定义添加访问后端地址定义。
-//     define: {
-//     "process.env": {
-//       BASE_URL: "http://localhost",
-//     },
-//   },
-// })
 const { defineConfig } = require('@vue/cli-service')
-const webpack = require('webpack') // 引入 webpack
+const path = require('path')
 
 module.exports = defineConfig({
   lintOnSave: false,
   transpileDependencies: true,
+
   devServer: {
-    host: "0.0.0.0",  
-    port: "9092", // 代理端口
-  },  
-  // ✅ 正确方式：使用 DefinePlugin 定义全局变量
-  configureWebpack: {
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.BASE_URL': JSON.stringify('http://169.254.55.172/8001'),
-      }),
-    ],
-  },
+    host: "0.0.0.0",
+    port: 9092,
+    client: {
+      overlay: false,
+    },
+    proxy: {
+      '': {
+        target: 'http://192.168.161.233:8001',
+        changeOrigin: true,
+        pathRewrite: { '^/api': '' },
+        onProxyReq(proxyReq) {
+          console.log('Proxying request to:', proxyReq.path)
+        },
+        onError(err) {
+          console.error('Proxy error:', err)
+        }
+      }
+    }
+  }
 })

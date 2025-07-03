@@ -1,4 +1,3 @@
-<!-- 注册 -->
 <template>
   <div>
     <div class="back" @click="goBack">

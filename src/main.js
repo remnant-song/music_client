@@ -6,13 +6,22 @@ import axios from "axios";
 import VUEAxios from "vue-axios";
 import "./assets/reset.css";
 
-
-import "swiper/css";
 import router from "./router";
+import "swiper/css";
 
 import store from "./store";
 const app = createApp(App);
 
+// 添加全局错误处理
+app.config.errorHandler = (err, vm, info) => {
+  console.error('Vue error:', err)
+}
+
+// 捕获未处理的Promise拒绝
+window.addEventListener('unhandledrejection', event => {
+  console.error('Unhandled promise rejection:', event.reason)
+  event.preventDefault()
+})
 app.use(router);
 app.use(ElementPlus);
 app.use(VUEAxios, axios);
