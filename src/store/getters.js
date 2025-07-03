@@ -41,3 +41,6 @@ export const hasSongList = (state) => state.hasSongList || [];
 
 // 拿到搜索结果
 export const searchResult = (state) => state.searchResult || [];
+
+// 所有消息通知
+export const allMessage = (state) => state.allMessage || [];

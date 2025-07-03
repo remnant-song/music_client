@@ -81,5 +81,10 @@ const mutations = {
   [types.SET_SEARCH_RESULT](state, searchResult) {
     state.searchResult = searchResult;
   },
+
+    // 获取所有消息通知
+  [types.SET_ALL_MESSAGE](state, allMessage) {
+    state.allMessage = allMessage;
+  },
  }
  export default mutations;

@@ -72,6 +72,9 @@ const state = {
   hasSongList: [], 
     // 拿到搜索结果
   searchResult: [],
+
+    // 所有消息通知
+  allMessage: [],
 };
 
 export default state;

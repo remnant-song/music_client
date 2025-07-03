@@ -38,3 +38,6 @@ export const SET_HAS_SONG_LIST = "SET_HAS_SONG_LIST";
 
 // 拿到搜索结果
 export const SET_SEARCH_RESULT = "SET_SEARCH_RESULT";
+
+// 获取所有消息通知
+export const SET_ALL_MESSAGE = "SET_ALL_MESSAGE";

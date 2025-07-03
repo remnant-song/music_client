@@ -13,3 +13,11 @@ export function modifyAllRead() {
     method: "post",
   });
 }
+
+// 获取所有消息
+export function getAllMessage() {
+  return request({
+    url: "/msg/getMsg",
+    method: "get",
+  });
+}

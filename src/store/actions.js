@@ -31,6 +31,8 @@ import{deleteSongList} from "../api/mine";
 import{deleteMusic} from "../api/mine";
 import{searchSong} from "../api/common";
 import{addSong} from "../api/mine";
+import{getAllMessage} from "../api/message";
+
 
 function findIndex(list, song) {
     return list.findIndex((item) => {
@@ -356,5 +358,12 @@ export const addMusic = ({ commit }, songId, listId) => {
         message: "歌曲已存在",
       });
     }
+  });
+};
+
+// 获取所有消息通知
+export const gainAllMessage = ({ commit }) => {
+  getAllMessage().then((res) => {
+    commit(types.SET_ALL_MESSAGE, res.data.msg);
   });
 };
