@@ -71,5 +71,15 @@ const mutations = {
   [types.SET_COLLECT_SONG_LIST](state, collectSongList) {
     state.collectSongList = collectSongList;
   },
+
+   // 获取我已经创建的歌单列表
+  [types.SET_HAS_SONG_LIST](state, hasSongList) {
+    state.hasSongList = hasSongList;
+  },
+
+    // 拿到搜索结果
+  [types.SET_SEARCH_RESULT](state, searchResult) {
+    state.searchResult = searchResult;
+  },
  }
  export default mutations;

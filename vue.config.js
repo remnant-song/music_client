@@ -23,6 +23,6 @@ module.exports = defineConfig({
           console.error('Proxy error:', err)
         }
       }
-    }
+    },
   }
 })

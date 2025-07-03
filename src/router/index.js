@@ -73,6 +73,13 @@ const routes = [
     name: "Like",
     component: () => import("../views/Mine/MineList.vue"),
   },
+
+    {
+    path: "/createSongList/:listId",
+    name: "createSongList",
+    component: () => import("../views/Mine/CreateSongList/CreateSongList.vue"),
+    meta: { title: "创建歌单" },
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(),

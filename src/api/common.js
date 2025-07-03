@@ -10,3 +10,12 @@ export function addLikeMusic(musicId) {
       params: { musicId },
     });
   }
+
+  // 歌曲搜索
+export function searchSong(keyword) {
+  return request({
+    url: "music/search",
+    method: "get",
+    params: { keyword },
+  });
+}

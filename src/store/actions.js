@@ -25,6 +25,13 @@ import { getSongListDetail } from "@/api/songlist";
 import{getMyLikeMusic} from "../api/mine";
 import{getCollectSongList} from "../api/songlist";
 import{removeCollectSongList} from "../api/mine";
+import{getMySongList} from "../api/mine";
+import{createSongList} from "../api/mine";
+import{deleteSongList} from "../api/mine";
+import{deleteMusic} from "../api/mine";
+import{searchSong} from "../api/common";
+import{addSong} from "../api/mine";
+
 function findIndex(list, song) {
     return list.findIndex((item) => {
       return item.id === song.id;
@@ -265,6 +272,88 @@ export const removeCollectMusicList = ({ commit }, listId) => {
       ElMessage({
         type: "error",
         message: res.message,
+      });
+    }
+  });
+};
+
+// 获取我已经创建的歌单
+export const gainMySongList = ({ commit }) => {
+  getMySongList().then((res) => {
+    commit(types.SET_HAS_SONG_LIST, res.data.list);
+  });
+};
+
+// 创建歌单
+export const createMusicList = ({ _ }, addForm) => {
+  createSongList(
+    addForm.name,
+    addForm.image,
+    addForm.message,
+    addForm.tags
+  ).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: "歌单创建成功",
+      });
+    }
+  });
+};
+
+// 删除歌单
+export const deleteMusicList = ({ commit }, listId) => {
+  deleteSongList(listId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
+  });
+};
+
+// 删除歌单中的歌曲
+export const deleteSong = ({ commit }, songId, listId) => {
+  deleteMusic(songId, listId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
+  });
+};
+
+// 根据关键字搜索歌曲
+export const searchMusic = ({ commit }, keyword) => {
+  searchSong(keyword).then((res) => {
+    commit(types.SET_SEARCH_RESULT, res.data.list);
+  });
+};
+
+// 在歌单中添加歌曲
+export const addMusic = ({ commit }, songId, listId) => {
+  addSong(songId, listId).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "warning",
+        message: "歌曲已存在",
       });
     }
   });

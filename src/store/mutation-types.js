@@ -32,3 +32,9 @@ export const SET_LIKE_MUSIC_LIST = "SET_LIKE_MUSIC_LIST";
 
 // 获取收藏的歌单
 export const SET_COLLECT_SONG_LIST = "SET_COLLECT_SONG_LIST";
+
+// 获取我已经创建的歌单列表
+export const SET_HAS_SONG_LIST = "SET_HAS_SONG_LIST";
+
+// 拿到搜索结果
+export const SET_SEARCH_RESULT = "SET_SEARCH_RESULT";

@@ -67,6 +67,11 @@ const state = {
 
     // 收藏歌单信息
   collectSongList: [],
+
+    // 已经创建的歌单列表
+  hasSongList: [], 
+    // 拿到搜索结果
+  searchResult: [],
 };
 
 export default state;

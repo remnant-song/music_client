@@ -32,3 +32,47 @@ export function removeCollectSongList(listId) {
     params: { listId },
   });
 }
+
+// 获取我已经创建的歌单
+export function getMySongList() {
+  return request({
+    url: "/songList/getMySongList",
+    method: "get",
+  });
+}
+
+// 创建歌单
+export function createSongList(name, image, message, tags) {
+  return request({
+    url: "/songList/create",
+    method: "post",
+    data: { name, image, message, tags },
+  });
+}
+
+// 删除歌单
+export function deleteSongList(listId) {
+  return request({
+    url: "/songList/removeSongList",
+    method: "post",
+    params: { listId },
+  });
+}
+
+// 删除歌单中的歌曲
+export function deleteMusic({ songId, listId }) {
+  return request({
+    url: "/songList/removeSong",
+    method: "post",
+    params: { songId, listId },
+  });
+}
+
+// 在歌单中添加歌曲
+export function addSong({ songId, listId }) {
+  return request({
+    url: "/songList/addSong",
+    method: "post",
+    params: { songId, listId },
+  });
+}

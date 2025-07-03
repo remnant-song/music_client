@@ -35,3 +35,9 @@ export const likeMusicList = (state) => state.likeMusicList || [];
 
 // 收藏歌单信息
 export const collectSongList = (state) => state.collectSongList || [];
+
+// 已经创建的歌单列表
+export const hasSongList = (state) => state.hasSongList || [];
+
+// 拿到搜索结果
+export const searchResult = (state) => state.searchResult || [];
