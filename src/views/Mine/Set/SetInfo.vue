@@ -3,7 +3,7 @@
   <div>
     <div class="back" @click="goBack">
       <el-page-header
-        icon="el-icon-arrow-left"
+        :icon="ArrowLeft"
         title="返回"
         content="设置用户信息"
       />
@@ -52,8 +52,10 @@
 <script>
 import { get } from "lodash-es";
 import rules from "../../../utils/validator";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
+  components: { ArrowLeft },
   data() {
     return {
       userMessage: {

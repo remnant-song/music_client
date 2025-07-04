@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="back" @click="goBack">
-      <el-page-header icon="el-icon-arrow-left" title="返回" content="注册" />
+      <el-page-header :icon="ArrowLeft" title="返回" content="注册" />
     </div>
     <el-form
       :model="registerForm"
@@ -50,8 +50,10 @@
 
 <script>
 import rules from "../../utils/validator.js";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
+  components: { ArrowLeft },
   // inject: ["reload"],
   data() {
     return {

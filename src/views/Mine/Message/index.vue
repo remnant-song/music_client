@@ -6,10 +6,12 @@
         <el-collapse-item
           v-for="(item, index) in allMessage"
           :key="item.id"
-          :title="item.title"
           :name="index + 1"
           class="minHeight message-card"
         >
+          <template #title>
+            <span :class="item.isread ? 'msg-title-read' : 'msg-title-unread'">{{ item.title }}</span>
+          </template>
           <div class="msg-content">{{ item.msg }}</div>
         </el-collapse-item>
       </el-collapse>
@@ -57,7 +59,7 @@ export default {
   transition: box-shadow 0.18s, border 0.18s, background 0.18s;
 }
 .message-card :deep(.el-collapse-item__header) {
-  font-size: 0.5rem;
+  font-size: 0.45rem;
   font-weight: 700;
   color: #b0b6c6;
   background: #f8fafc;
@@ -99,7 +101,7 @@ export default {
     margin-bottom: 10px;
   }
   .message-card :deep(.el-collapse-item__header) {
-    font-size: 0.425rem;
+    font-size: 0.382rem;
     padding: 10px 8px;
     border-radius: 10px 10px 0 0;
   }
@@ -110,5 +112,32 @@ export default {
   .msg-content {
     font-size: 0.4rem;
   }
+}
+.back {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.back-arrow {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-right: 4px;
+  color: #6366f1;
+}
+.back-title {
+  font-size: 1em;
+  font-weight: 600;
+  color: #22223b;
+  margin-right: 8px;
+}
+.back-content {
+  font-size: 0.9em;
+  color: #b0b6c6;
+}
+.msg-title-unread {
+  color: #22223b;
+}
+.msg-title-read {
+  color: #b0b6c6;
 }
 </style>

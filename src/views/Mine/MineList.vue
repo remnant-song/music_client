@@ -3,7 +3,7 @@
   <div>
     <div class="back" @click="goBack">
       <el-page-header
-        icon="el-icon-arrow-left"
+        :icon="ArrowLeft"
         title="返回"
         :content="headTitle"
       />
@@ -22,9 +22,10 @@ import CollectList from "./CollectList/index.vue";
 import CreateSongList from "./CreateSongList/index.vue";
 import Message from "./Message/index.vue";
 import Set from "./Set/index.vue";
+import { ArrowLeft } from '@element-plus/icons-vue';
 export default {
   name: "Like",
-  components: { MyLike,CollectList,CreateSongList,Message,Set},
+  components: { MyLike,CollectList,CreateSongList,Message,Set,ArrowLeft},
   data() {
     return {};
   },

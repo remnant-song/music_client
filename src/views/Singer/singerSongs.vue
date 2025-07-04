@@ -3,7 +3,7 @@
   <div>
     <div class="back" @click="goBack">
       <el-page-header
-        icon="el-icon-arrow-left"
+        :icon="ArrowLeft"
         title="返回"
         :content="singerDetail.username"
       />
@@ -42,9 +42,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
   name: "songlist-detail",
+  components: { ArrowLeft },
   data() {
     return {};
   },

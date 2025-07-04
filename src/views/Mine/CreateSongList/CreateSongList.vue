@@ -3,7 +3,7 @@
   <div>
     <div class="back" @click="goBack">
       <el-page-header
-        icon="el-icon-arrow-left"
+        :icon="ArrowLeft"
         title="返回"
         :content="listMessage.name"
       />
@@ -43,12 +43,13 @@
 <script>
 import AddMusic from "./AddMusic.vue";
 import { mapGetters } from "vuex";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
   data() {
     return {};
   },
-  components: { AddMusic },
+  components: { AddMusic, ArrowLeft },
   watch: {
     "$route.params.listId": {
       immediate: true,

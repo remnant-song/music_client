@@ -2,7 +2,7 @@
 <template>
   <div>
     <div class="back" @click="goBack">
-      <el-page-header icon="el-icon-arrow-left" title="返回" content="搜索" />
+      <el-page-header :icon="ArrowLeft" title="返回" content="搜索" />
     </div>
     <div class="search">
       <el-input
@@ -41,9 +41,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
   name: "search",
+  components: { ArrowLeft },
   data() {
     return {
       keyword: "",

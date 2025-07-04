@@ -3,7 +3,7 @@
   <div>
     <div class="back" @click="goBack">
       <el-page-header
-        icon="el-icon-arrow-left"
+        :icon="ArrowLeft"
         title="返回"
         content="修改密码"
       />
@@ -38,9 +38,11 @@
 
 <script>
 import rules from "../../../utils/validator.js";
+import { ArrowLeft } from '@element-plus/icons-vue';
 
 export default {
   name: "",
+  components: { ArrowLeft },
   data() {
     return {
       password: {
