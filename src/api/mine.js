@@ -76,3 +76,11 @@ export function addSong({ songId, listId }) {
     params: { songId, listId },
   });
 }
+
+export function settingUserInfo(username, emial, phone, about) {
+  return request({
+    url: "/setting/setMessage",
+    method: "post",
+    data: { username, emial, phone, about },
+  });
+}

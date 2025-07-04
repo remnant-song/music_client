@@ -23,6 +23,16 @@ function validatorEmail(rule, value, callback) {
   }
 }
 
+function validatorName(rule, value, callback) {
+  if (value === "") {
+    callback(new Error(" 姓名不能为空 "));
+  } else if (!/^[\u4E00-\u9FA5]{2,4}$/.test(value)) {
+    callback(new Error(" 姓名应为汉字并且长度在2到4位 "));
+  } else {
+    callback();
+  }
+}
+
 export default {
       // 手机号
   phoneRules: [
@@ -52,6 +62,17 @@ export default {
       max: 18,
       message: "密码长度在 5 到 18 个字符",
       trigger: "blur",
+    },
+  ],
+
+    // 昵称
+  nameRules: [
+    { required: true, message: "名称不能为空", trigger: "change" },
+    {
+      min: 4,
+      max: 24,
+      message: "名称长度应为 4 到 24 个字符",
+      trigger: "change",
     },
   ],
 };

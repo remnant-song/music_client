@@ -12,6 +12,7 @@
     <CollectList v-if="selectPage == 'collectSongList'" />
     <CreateSongList v-if="selectPage == 'createSongList'" />
      <Message v-if="selectPage == 'message'" />
+     <Set v-if="selectPage == 'setting'" />
   </div>
 </template>
 
@@ -20,9 +21,10 @@ import MyLike from  "../MyLike/index.vue";
 import CollectList from "./CollectList/index.vue";
 import CreateSongList from "./CreateSongList/index.vue";
 import Message from "./Message/index.vue";
+import Set from "./Set/index.vue";
 export default {
   name: "Like",
-  components: { MyLike,CollectList,CreateSongList,Message},
+  components: { MyLike,CollectList,CreateSongList,Message,Set},
   data() {
     return {};
   },

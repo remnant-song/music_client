@@ -60,6 +60,7 @@
 
 <script>
 import { ElMessage } from "element-plus";
+import path from "path-browserify";
 import { mapState } from "vuex";
 
 export default {
@@ -119,9 +120,13 @@ export default {
       if (localStorage.getItem("token")) {
         this.$router
           .push({
-            path: `/mine/list/${item.value}/${item.title}`,
+            // path: `/mine/list/${item.value}/${item.title}`,
+             path: `/mine/list/${item.value}/${item.title}`,
+            // consolelog(path)
           })
           .then(() => {
+            // console.log(`已跳转到：+${item.value}/${item.title}`);
+            // this.$message.success(`正在跳转到 ${item.title}`);
             if (item.id == 4) {
               this.$store.dispatch("modifyAllMsgRead");
               setTimeout(() => {

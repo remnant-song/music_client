@@ -72,13 +72,23 @@ const routes = [
     path: "/mine/list/:value/:title",
     name: "Like",
     component: () => import("../views/Mine/MineList.vue"),
+     meta: { title: "我喜欢的音乐"},
   },
 
     {
     path: "/createSongList/:listId",
+    // path: "/mine/list/:value/:title",
     name: "createSongList",
     component: () => import("../views/Mine/CreateSongList/CreateSongList.vue"),
     meta: { title: "创建歌单" },
+  },
+
+    {
+    path: "/mine/set/:value",
+    // path: "/mine/list/:value/:title",
+    name: "Set",
+    component: () => import("../views/Mine/Set/SetList.vue"),
+    meta: { title: "设置" },
   },
 ];
 const router = createRouter({

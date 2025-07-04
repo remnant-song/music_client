@@ -12,10 +12,21 @@ module.exports = defineConfig({
       overlay: false,
     },
     proxy: {
-      '': {
-        target: 'http://192.168.161.233:8001',
+      '/login': {
+        target: 'http://192.168.34.208:8001',
         changeOrigin: true,
-        pathRewrite: { '^/api': '' },
+        pathRewrite: { '^/login': '/login' },
+        onProxyReq(proxyReq) {
+          console.log('Proxying request to:', proxyReq.path)
+        },
+        onError(err) {
+          console.error('Proxy error:', err)
+        }
+      },
+        '/music': {
+        target: 'http://192.168.34.208:8002',
+        changeOrigin: true,
+        pathRewrite: { '^/music': '/music' },
         onProxyReq(proxyReq) {
           console.log('Proxying request to:', proxyReq.path)
         },

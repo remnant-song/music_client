@@ -32,6 +32,8 @@ import{deleteMusic} from "../api/mine";
 import{searchSong} from "../api/common";
 import{addSong} from "../api/mine";
 import{getAllMessage} from "../api/message";
+import{settingUserInfo} from "../api/mine";
+import{editPassword} from "../api/login";
 
 
 function findIndex(list, song) {
@@ -365,5 +367,44 @@ export const addMusic = ({ commit }, songId, listId) => {
 export const gainAllMessage = ({ commit }) => {
   getAllMessage().then((res) => {
     commit(types.SET_ALL_MESSAGE, res.data.msg);
+  });
+};
+
+// 设置用户信息
+export const setUserInfo = ({ commit }, userMessage) => {
+  settingUserInfo(
+    userMessage.username,
+    userMessage.email,
+    userMessage.phone,
+    userMessage.about
+  ).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: res.message,
+      });
+    }
+  });
+};
+
+// 修改密码
+export const editPwd = ({ commit }, oldPassword, newPassword) => {
+  editPassword(oldPassword, newPassword).then((res) => {
+    if (res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: res.message,
+      });
+    } else if (res.code == "50") {
+      ElMessage({
+        type: "error",
+        message: "原密码错误",
+      });
+    }
   });
 };

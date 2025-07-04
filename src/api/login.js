@@ -24,3 +24,12 @@ export function toRegister(email, phone, password, role) {
     data: { email, phone, password, role },
   });
 }
+
+// 修改密码
+export function editPassword({ oldPassword, newPassword }) {
+  return request({
+    url: "/setting/setPassword",
+    method: "POST",
+    params: { oldPassword, newPassword },
+  });
+}
