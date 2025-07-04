@@ -33,6 +33,28 @@ module.exports = defineConfig({
         onError(err) {
           console.error('Proxy error:', err)
         }
+      },
+        '/setting': {
+        target: 'http://192.168.34.208:8005',
+        changeOrigin: true,
+        pathRewrite: { '^/setting': '/setting' },
+        onProxyReq(proxyReq) {
+          console.log('Proxying request to:', proxyReq.path)
+        },
+        onError(err) {
+          console.error('Proxy error:', err)
+        }
+      },
+        '/msg': {
+        target: 'http://192.168.34.208:8006',
+        changeOrigin: true,
+        pathRewrite: { '^/msg': '/msg' },
+        onProxyReq(proxyReq) {
+          console.log('Proxying request to:', proxyReq.path)
+        },
+        onError(err) {
+          console.error('Proxy error:', err)
+        }
       }
     },
   }
