@@ -22,7 +22,7 @@
         <!--顶部-->
         <div class="top">
           <div class="back" @click="back">
-            <i class="icon-back"></i>
+            <el-icon class="player-back-icon"><ArrowLeft /></el-icon>
           </div>
           <h1 class="title">{{ currentSong.musicName }}</h1>
           <h2 class="subtitle">{{ currentSong.userName }}</h2>
@@ -91,29 +91,22 @@
               {{ format(currentSong.timelength) }}
             </span>
             <div class="star">
-              <i
-                class="starIcon el-icon-star-on"
-                v-if="isLike"
-                style="color: crimson"
-                @click.stop="handleStar(currentSong.musicId)"
-              ></i>
-              <i
-                class="starIcon el-icon-star-off"
-                v-else
-                style="color: #fff"
-                @click.stop="handleStar(currentSong.musicId)"
-              ></i>
+              <el-icon v-if="isLike" style="color: crimson" @click.stop="handleStar(currentSong.musicId)"><StarFilled /></el-icon>
+              <el-icon v-else style="color: #fff" @click.stop="handleStar(currentSong.musicId)"><Star /></el-icon>
             </div>
           </div>
           <div class="operators">
             <div class="icon i-left" :class="disableCls">
-              <i class="icon-prev" @click="prev"></i>
+              <el-icon @click="prev"><CaretLeft /></el-icon>
             </div>
             <div class="icon i-center" :class="disableCls">
-              <i :class="playIcon" @click="togglePlaying"></i>
+              <el-icon @click="togglePlaying">
+                <VideoPause v-if="playing" />
+                <VideoPlay v-else />
+              </el-icon>
             </div>
             <div class="icon i-right" :class="disableCls">
-              <i class="icon-next" @click="next"></i>
+              <el-icon @click="next"><CaretRight /></el-icon>
             </div>
           </div>
         </div>
@@ -160,6 +153,7 @@ import { playerMixin } from "../common/mixin";
 import { ElMessage } from "element-plus";
 import { getSongDetailByMusicId } from "../api/songlist";
 import { getLyric } from "../api/common";
+import { ArrowLeft, Star, StarFilled, CaretLeft, CaretRight, VideoPause, VideoPlay } from '@element-plus/icons-vue';
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
@@ -183,6 +177,13 @@ export default {
     // ProgressCircle,
     Scroll,
     ElMessage,
+    ArrowLeft,
+    Star,
+    StarFilled,
+    CaretLeft,
+    CaretRight,
+    VideoPause,
+    VideoPlay,
   },
   // 滑动touch
   created() {
@@ -597,12 +598,10 @@ export default {
   left: 6px;
   z-index: 50;
 }
-.player .normal-player .top .back .icon-back {
-  display: block;
-  padding: 9px;
-  font-size: 22px;
-  color: #ffcd32;
-  transform: rotate(-90deg);
+.player .normal-player .top .back .player-back-icon {
+  color: #fff !important;
+  font-size: 32px !important;
+  vertical-align: middle;
 }
 .player .normal-player .top .title {
   width: 70%;
@@ -896,5 +895,10 @@ export default {
 }
 .el-message {
   z-index: 999999;
+}
+.player-back-icon {
+  color: #fff !important;
+  font-size: 32px !important;
+  vertical-align: middle;
 }
 </style>
