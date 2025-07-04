@@ -3,7 +3,7 @@
     <!-- 菜单导航组件 -->
     <NavMenu />
   </el-header>
-  <el-main>
+  <el-main class="main-no-gap">
     <router-view v-slot="{ Component }" v-if="isRouterAlive">
       <keep-alive>
         <component :is="Component" />
@@ -43,3 +43,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.main-no-gap {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+</style>
