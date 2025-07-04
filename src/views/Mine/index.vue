@@ -1,8 +1,8 @@
 <!-- 我的 -->
 <template>
-  <div class="bg">
+  <div class="mine-main-container">
     <!-- 头像 -->
-    <div class="touxiang">
+    <div class="touxiang-card">
       <div @click="loadingTips">
         <el-upload
           class="uploadImage"
@@ -15,26 +15,22 @@
         >
           <div v-if="userInfo">
             <el-image
-              :src="
-                userInfo.imageUrl
-                  ? userInfo.imageUrl
-                  : 'https://i.postimg.cc/W3WxBjSD/unload.webp'
-              "
+              :src="userInfo.imageUrl ? userInfo.imageUrl : 'https://i.postimg.cc/W3WxBjSD/unload.webp'"
               class="headImage"
             ></el-image>
           </div>
           <i v-else class="el-icon-plus uploadIcon"></i>
         </el-upload>
       </div>
-      <span @click="editName" ref="nameRef">
+      <span class="mine-username" @click="editName" ref="nameRef">
         <span v-if="userInfo">{{ userInfo.username }}</span>
         <el-button @click="login" v-else plain size="small">登录</el-button>
       </span>
     </div>
     <!-- 列表 -->
-    <div class="list">
+    <div class="mine-list-wrapper">
       <div
-        class="singleList"
+        class="mine-list-card"
         v-for="(item, index) in listTitle"
         :key="item.id"
         @click="jumpPage(item)"
@@ -47,12 +43,12 @@
         >
         </el-badge>
         <i class="icon" :class="item.icon"></i>
-        <span> {{ item.title }}</span>
+        <span class="mine-list-title">{{ item.title }}</span>
         <i class="brackets el-icon-right"></i>
       </div>
       <!-- 退出登录 -->
       <div class="logout">
-        <el-button @click="logout">退出登录</el-button>
+        <el-button class="logout-btn" @click="logout">退出登录</el-button>
       </div>
     </div>
   </div>
@@ -216,67 +212,152 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.bg {
-  background-color: rgb(248, 248, 248);
-  padding-top: 10px;
+.mine-main-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 10px 32px 10px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  min-height: 100vh;
 }
-.touxiang {
+.touxiang-card {
+  width: 120px;
+  margin: 0 auto 24px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px 0 rgba(191,207,255,0.10), 0 1px 3px 0 rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 0 10px 0;
+  position: relative;
+}
+.uploadImage {
   width: 100px;
   height: 100px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  text-align: center;
-  // 上传图片
-  .uploadImage {
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    border: 1px dashed #d9d9d9;
+  line-height: 100px;
+  border: 1px dashed #bfcfff;
+  border-radius: 50%;
+  .headImage {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    .headImage {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-  }
-  span {
-    display: block;
-    margin: 10px;
+    background: #f8fafc;
+    border: 2.5px solid #e0e7ff;
   }
 }
-.list {
-  margin: 10px;
-  margin-top: 50px;
+.mine-username {
+  display: block;
+  margin: 12px 0 0 0;
+  font-size: 0.24rem;
+  font-weight: 700;
+  color: #6366f1;
+  text-align: center;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.mine-list-wrapper {
+  margin: 0;
+  margin-top: 32px;
   padding-bottom: 30px;
-  .singleList {
-    position: relative;
-    height: 30px;
-    padding: 10px;
-    background-color: #fff;
-    margin-bottom: 20px;
-    .icon {
-      font-size: 20px;
-      margin-right: 10px;
-    }
-    span {
-      font-size: 20px;
-    }
-    .brackets {
-      float: right;
-      font-size: 15px;
-      margin-right: 5px;
-      line-height: 30px;
-    }
-  }
-  .logout {
-    margin-top: 40px;
-    text-align: center;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mine-list-card {
+  position: relative;
+  min-height: 38px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px 0 rgba(191,207,255,0.10), 0 1px 3px 0 rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+  border: 2px solid transparent;
+  transition: box-shadow 0.18s, border 0.18s, background 0.18s;
+  cursor: pointer;
+}
+.mine-list-card:hover {
+  border: 2px solid #bfcfff;
+  background: #f4f7ff;
+}
+.icon {
+  font-size: 22px;
+  margin-right: 12px;
+  color: #6366f1;
+}
+.mine-list-title {
+  font-size: 0.4rem;
+  color: #22223b;
+  font-weight: 600;
+  flex: 1;
+}
+.brackets {
+  font-size: 15px;
+  margin-left: 8px;
+  color: #bfcfff;
+  line-height: 1;
+}
+.logout {
+  margin-top: 40px;
+  text-align: center;
+}
+.logout-btn {
+  background: linear-gradient(90deg, #bfcfff 0%, #e0e7ff 100%);
+  color: #6366f1;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 8px 32px;
+  font-size: 0.4rem;
+  box-shadow: 0 2px 8px 0 rgba(191,207,255,0.10);
+  transition: background 0.18s, color 0.18s;
+}
+.logout-btn:hover {
+  background: linear-gradient(90deg, #e0e7ff 0%, #bfcfff 100%);
+  color: #22223b;
 }
 .badge {
   position: absolute;
   left: 0px;
   top: 5px;
+}
+@media (max-width: 480px) {
+  .mine-main-container {
+    max-width: 100vw;
+    padding: 14px 2px 18px 2px;
+  }
+  .touxiang-card {
+    width: 90px;
+    padding: 12px 0 6px 0;
+    margin: 0 auto 16px auto;
+  }
+  .uploadImage {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    .headImage {
+      border-width: 1.5px;
+    }
+  }
+  .mine-username {
+    font-size: 0.204rem;
+  }
+  .mine-list-card {
+    padding: 8px 8px;
+    border-radius: 10px;
+    min-height: 30px;
+  }
+  .mine-list-title {
+    font-size: 0.34rem;
+  }
+  .icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  .logout-btn {
+    font-size: 0.34rem;
+    padding: 6px 18px;
+  }
 }
 </style>
