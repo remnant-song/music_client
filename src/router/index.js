@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home/index.vue";
-import Login from '@/views/Mine/Login.vue';
-import Mine from '@/views/Mine/index.vue';
+import Login from '../views/Mine/Login.vue';
+import Mine from '../views/Mine/index.vue';
 
 const routes = [
   {
@@ -89,6 +89,13 @@ const routes = [
     name: "Set",
     component: () => import("../views/Mine/Set/SetList.vue"),
     meta: { title: "设置" },
+  },
+
+    {
+    path: "/search",
+    name: "search",
+    component: () => import("../views/Search/index.vue"),
+    meta: { title: "搜索" },
   },
 ];
 const router = createRouter({
