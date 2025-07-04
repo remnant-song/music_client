@@ -118,4 +118,8 @@ export default {
     margin-left: 0;
   }
 }
+.el-menu.el-menu-demo .el-menu-item.is-active {
+  background: #e0e7ff !important;
+  color: #6366f1 !important;
+}
 </style>

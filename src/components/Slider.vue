@@ -116,4 +116,8 @@ export default {
     bottom: 2px;
   }
 }
+.el-menu.el-menu-demo .el-menu-item.is-active {
+  background: #6366f1 !important;
+  color: #fff !important;
+}
 </style>
