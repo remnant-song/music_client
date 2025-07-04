@@ -33,12 +33,27 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-affix {
+  width: 100vw !important;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+.el-header {
+  width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
 .el-menu-demo {
   background: linear-gradient(90deg, #f8fafc 0%, #e0e7ff 100%);
   border-radius: 0 0 8px 8px;
   box-shadow: none;
   border: none;
-  padding: 0 8px;
+  padding: 0;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -104,7 +119,7 @@ export default {
   .el-menu-demo {
     border-radius: 0 0 6px 6px;
     min-height: 36px;
-    padding: 0 2px;
+    padding: 0;
     max-width: 100vw;
   }
   .el-menu-demo .el-menu-item {

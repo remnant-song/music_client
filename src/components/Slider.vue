@@ -120,4 +120,11 @@ export default {
   background: #6366f1 !important;
   color: #fff !important;
 }
+
+.main-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 10px;
+  width: 100%;
+}
 </style>
