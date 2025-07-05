@@ -44,7 +44,7 @@ export default {
 }
 
 /* 轮播容器美化 */
-.swiper-container {
+ .swiper-container {
   width: 35%;
   margin: 0 auto;
   border-radius: 18px;

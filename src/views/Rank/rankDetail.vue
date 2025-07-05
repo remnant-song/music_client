@@ -1,13 +1,11 @@
 <!-- 排行榜详情 -->
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header
-        :icon="ArrowLeft"
-        title="返回"
-        content="榜单歌曲"
-      />
-    </div>
+    <PageHeader 
+      title="榜单歌曲" 
+      subtitle="热门排行"
+      @back="goBack"
+    />
     <div class="coverPic">
       <img src="/image/pic1.png" v-if="category == 'hotList'" />
       <img src="/image/pic2.png" v-if="category == 'newList'" />
@@ -35,7 +33,8 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
+
 export default {
   name: "",
   data() {
@@ -68,23 +67,14 @@ export default {
       });
     },
     goBack() {
-      this.$router.back();
+      this.$router.push('/rank');
     },
   },
-  components: { ArrowLeft },
+  components: { PageHeader },
 };
 </script>
 <style lang="less" scoped>
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-}
+/* 移除旧的导航栏样式 */
 .coverPic {
   width: 200px;
   height: 200px;

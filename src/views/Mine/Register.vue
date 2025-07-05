@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header :icon="ArrowLeft" title="返回" content="注册" />
-    </div>
+    <PageHeader 
+      title="注册" 
+      subtitle="创建新账户"
+      @back="goBack"
+    />
     <el-form
       :model="registerForm"
       ref="registerFormRef"
@@ -50,10 +52,10 @@
 
 <script>
 import rules from "../../utils/validator.js";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 export default {
-  components: { ArrowLeft },
+  components: { PageHeader },
   // inject: ["reload"],
   data() {
     return {
@@ -100,17 +102,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-  margin-left: 10px;
-}
+/* 移除旧的导航栏样式 */
 .bform {
   width: 100%;
   height: 100%;

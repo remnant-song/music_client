@@ -1,13 +1,11 @@
 <!-- 修改密码 -->
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header
-        :icon="ArrowLeft"
-        title="返回"
-        content="修改密码"
-      />
-    </div>
+    <PageHeader 
+      title="修改密码" 
+      subtitle="账户安全"
+      @back="goBack"
+    />
     <el-form ref="loginFormRef" status-icon class="bform" :model="password">
       <el-form-item label="原密码">
         <el-input
@@ -38,11 +36,11 @@
 
 <script>
 import rules from "../../../utils/validator.js";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 export default {
   name: "",
-  components: { ArrowLeft },
+  components: { PageHeader },
   data() {
     return {
       password: {
@@ -55,7 +53,7 @@ export default {
   methods: {
     // 返回
     goBack() {
-      this.$router.back();
+      this.$router.push('/mine/set');
     },
     editPassword() {
       this.$store.dispatch("editPwd", {
@@ -67,17 +65,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-  margin-left: 10px;
-}
+/* 移除旧的导航栏样式 */
 .bform {
   width: 100%;
   height: 100%;

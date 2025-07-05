@@ -1,13 +1,11 @@
 <!-- 选择页面 -->
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header
-        :icon="ArrowLeft"
-        title="返回"
-        :content="headTitle"
-      />
-    </div>
+    <PageHeader 
+      :title="headTitle" 
+      subtitle="个人中心"
+      @back="goBack"
+    />
     <MyLike v-if="selectPage == 'likeMusic'" />
     <CollectList v-if="selectPage == 'collectSongList'" />
     <CreateSongList v-if="selectPage == 'createSongList'" />
@@ -22,10 +20,11 @@ import CollectList from "./CollectList/index.vue";
 import CreateSongList from "./CreateSongList/index.vue";
 import Message from "./Message/index.vue";
 import Set from "./Set/index.vue";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
+
 export default {
   name: "Like",
-  components: { MyLike,CollectList,CreateSongList,Message,Set,ArrowLeft},
+  components: { MyLike,CollectList,CreateSongList,Message,Set,PageHeader},
   data() {
     return {};
   },
@@ -39,20 +38,11 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.back();
+      this.$router.push('/mine');
     },
   },
 };
 </script>
 <style lang="less" scoped>
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-}
+/* 移除旧的导航栏样式 */
 </style>

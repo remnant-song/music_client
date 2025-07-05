@@ -1,13 +1,11 @@
 <!-- 创建歌单  -->
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header
-        :icon="ArrowLeft"
-        title="返回"
-        :content="listMessage.name"
-      />
-    </div>
+    <PageHeader 
+      :title="listMessage.name" 
+      subtitle="歌单详情"
+      @back="goBack"
+    />
     <div class="songListTitle">
       <div>
         <el-image class="songListImg" :src="listMessage.image"></el-image>
@@ -45,13 +43,14 @@
 <script>
 import AddMusic from "./AddMusic.vue";
 import { mapGetters } from "vuex";
-import { ArrowLeft, Delete } from '@element-plus/icons-vue';
+import { Delete } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 export default {
   data() {
     return {};
   },
-  components: { AddMusic, ArrowLeft, Delete },
+  components: { AddMusic, Delete, PageHeader },
   watch: {
     "$route.params.listId": {
       immediate: true,
@@ -101,17 +100,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-  margin-left: 10px;
-}
+/* 移除旧的导航栏样式 */
 .songListTitle {
   height: 160px;
   padding: 0 12px;

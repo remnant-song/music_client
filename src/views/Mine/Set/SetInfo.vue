@@ -1,13 +1,11 @@
 <!-- 设置用户信息 -->
 <template>
   <div>
-    <div class="back" @click="goBack">
-      <el-page-header
-        :icon="ArrowLeft"
-        title="返回"
-        content="设置用户信息"
-      />
-    </div>
+    <PageHeader 
+      title="个人信息" 
+      subtitle="编辑个人资料"
+      @back="goBack"
+    />
     <!-- 个人资料设置 -->
     <div class="selfInfo">
       <el-form :model="userMessage" ref="userInfoRef" label-width="100px">
@@ -52,10 +50,10 @@
 <script>
 import { get } from "lodash-es";
 import rules from "../../../utils/validator";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import PageHeader from '@/components/PageHeader.vue';
 
 export default {
-  components: { ArrowLeft },
+  components: { PageHeader },
   data() {
     return {
       userMessage: {
@@ -95,7 +93,7 @@ export default {
     },
     // 返回
     goBack() {
-      this.$router.back();
+      this.$router.push('/mine/set');
     },
   },
 };
@@ -111,15 +109,5 @@ export default {
   align-items: center;
   margin-top: 50px;
 }
-.back {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  z-index: 200;
-  background-color: #fff;
-  width: 100%;
-  height: 36px;
-  padding-top: 15px;
-  margin-left: 10px;
-}
+/* 移除旧的导航栏样式 */
 </style>
