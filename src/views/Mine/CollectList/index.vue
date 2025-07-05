@@ -29,7 +29,9 @@
         </span>
       </el-col>
       <el-col class="deleteIcon" :span="2">
-        <i class="el-icon-delete" @click.stop="remove(item.id)"></i>
+        <el-icon @click.stop="remove(item.id)">
+          <Delete />
+        </el-icon>
       </el-col>
     </el-row>
   </div>
@@ -38,8 +40,10 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import { ElMessage } from "element-plus";
+import { Delete } from '@element-plus/icons-vue';
 
 export default {
+  components: { Delete },
   data() {
     return {
     };

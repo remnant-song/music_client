@@ -14,10 +14,12 @@
           >
             <span style="margin-right: 20px">{{ index + 1 }}</span>
             <span>{{ item.musicName }}</span>
-            <i
-              class="el-icon-delete deleteIcon"
+            <el-icon
+              class="deleteIcon"
               @click.stop="remove(item.musicId)"
-            ></i>
+            >
+              <Delete />
+            </el-icon>
           </li>
         </ul>
       </div>
@@ -27,8 +29,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { Delete } from '@element-plus/icons-vue';
 
 export default {
+  components: { Delete },
   data() {
     return {};
   },

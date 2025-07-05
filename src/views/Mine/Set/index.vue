@@ -8,30 +8,35 @@
         :key="item.id"
         @click="jumpPage(item)"
       >
-        <i class="icon" :class="item.icon"></i>
+        <el-icon class="icon" :color="'#6366f1'">
+          <component :is="item.icon" />
+        </el-icon>
         <span>{{ item.title }}</span>
-        <i class="brackets el-icon-right"></i>
+        <el-icon class="brackets" :color="'#6366f1'"><ArrowRight /></el-icon>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { User, Key, ArrowRight } from '@element-plus/icons-vue';
+
 export default {
   name: "",
+  components: { User, Key, ArrowRight },
   data() {
     return {
       listTitle: [
         {
           id: 1,
           title: "设置个人信息",
-          icon: "el-icon-s-custom",
+          icon: "User",
           value: "setInfo",
         },
         {
           id: 2,
           title: "修改密码",
-          icon: "el-icon-key",
+          icon: "Key",
           value: "editPassword",
         },
       ],

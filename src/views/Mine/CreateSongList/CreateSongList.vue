@@ -27,10 +27,12 @@
         <ul>
           <li v-for="(item, index) in musicList" :key="item.musicId">
             <span @click="jump">{{ item.musicName }}</span>
-            <i
-              class="el-icon-delete deleteIcon"
+            <el-icon
+              class="deleteIcon"
               @click.stop="deleteMusic(item.musicId)"
-            ></i>
+            >
+              <Delete />
+            </el-icon>
           </li>
         </ul>
       </div>
@@ -43,13 +45,13 @@
 <script>
 import AddMusic from "./AddMusic.vue";
 import { mapGetters } from "vuex";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import { ArrowLeft, Delete } from '@element-plus/icons-vue';
 
 export default {
   data() {
     return {};
   },
-  components: { AddMusic, ArrowLeft },
+  components: { AddMusic, ArrowLeft, Delete },
   watch: {
     "$route.params.listId": {
       immediate: true,

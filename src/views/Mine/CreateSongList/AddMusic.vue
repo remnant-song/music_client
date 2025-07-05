@@ -16,7 +16,9 @@
           clearable
         >
         </el-input>
-        <el-button icon="el-icon-search" @click="search"></el-button>
+        <el-button @click="search">
+          <el-icon><Search /></el-icon>
+        </el-button>
       </div>
       <!-- 查询结果 -->
       <div class="result">
@@ -39,7 +41,10 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import { Search } from '@element-plus/icons-vue';
+
 export default {
+  components: { Search },
   data() {
     return {
       keyword: "",

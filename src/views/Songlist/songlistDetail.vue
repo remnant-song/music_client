@@ -23,11 +23,11 @@
           @click="collectSongList"
           v-if="!listMessage.isLike"
         >
-          <i class="el-icon-plus"></i>
+          <el-icon><Plus /></el-icon>
           <i>收藏歌单</i>
         </span>
         <span class="collected" v-else>
-          <i class="el-icon-check"></i>
+          <el-icon><Check /></el-icon>
           <i>已收藏</i>
         </span>
       </div>
@@ -49,11 +49,11 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import { ArrowLeft, Plus, Check } from '@element-plus/icons-vue';
 
 export default {
   name: "songlist-detail",
-  components: { ArrowLeft },
+  components: { ArrowLeft, Plus, Check },
   data() {
     return {};
   },

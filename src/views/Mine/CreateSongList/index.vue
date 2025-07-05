@@ -6,15 +6,13 @@
       <span style="color: grey; float: left"
         >创建歌单（{{ totalList }}个）</span
       >
-      <i
-         class="el-icon-plus" 
+      <el-icon
         style="float: right; font-size: 20px;
-        background-image:url('image/add.svg') ;
-        background-position: center;
-        background-size: contain;
          width: 20px; height: 20px;"
         @click="addDialog"
-      ></i>
+      >
+        <Plus />
+      </el-icon>
       <!-- 已有歌单列表 -->
       <el-row
         class="songListTitle"
@@ -37,7 +35,9 @@
           >
         </el-col>
         <el-col class="deleteIcon" :span="2">
-          <i class="el-icon-delete" @click.stop="deleteSongList(item.id)"></i>
+          <el-icon @click.stop="deleteSongList(item.id)">
+            <Delete />
+          </el-icon>
         </el-col>
       </el-row>
       <!-- 点击新增后的弹窗 -->
@@ -74,7 +74,9 @@
                 :src="addForm.image"
                 class="pic"
               ></el-image>
-              <i v-else class="el-icon-plus uploadIcon"></i>
+              <el-icon v-else class="uploadIcon">
+                <Plus />
+              </el-icon>
             </el-upload>
           </el-form-item>
           <el-form-item label="标签">
@@ -97,8 +99,10 @@
 
 <script>
 import { mapState } from "vuex";
+import { Plus, Delete } from '@element-plus/icons-vue';
 // import * as ElIcons from '@element-plus/icons'
 export default {
+  components: { Plus, Delete },
   inject: ["reload"],
   name: "",
   data() {

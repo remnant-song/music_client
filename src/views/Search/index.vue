@@ -13,12 +13,11 @@
         clearable
       >
       </el-input>
-      <el-button icon="el-icon-search"
-      style="background-image: url('image/search.svg');
-        background-position: center;
-        background-size: contain;
-        width: 30px; height: 30px;"
-       @click="search"></el-button>
+      <el-button
+
+       @click="search">
+        <el-icon><Search /></el-icon>
+      </el-button>
     </div>
     <!-- 查询结果 -->
     <div class="result">
@@ -41,11 +40,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { ArrowLeft } from '@element-plus/icons-vue';
+import { ArrowLeft, Search } from '@element-plus/icons-vue';
 
 export default {
   name: "search",
-  components: { ArrowLeft },
+  components: { ArrowLeft, Search },
   data() {
     return {
       keyword: "",

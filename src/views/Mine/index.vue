@@ -19,7 +19,7 @@
               class="headImage"
             ></el-image>
           </div>
-          <i v-else class="el-icon-plus uploadIcon"></i>
+          <el-icon v-else class="uploadIcon"><Plus /></el-icon>
         </el-upload>
       </div>
       <span class="mine-username" @click="editName" ref="nameRef">
@@ -42,9 +42,11 @@
           v-if="item.id == 4 && unReadMsgNum"
         >
         </el-badge>
-        <i class="icon" :class="item.icon"></i>
+        <el-icon class="icon" :color="'#6366f1'">
+          <component :is="item.icon" />
+        </el-icon>
         <span class="mine-list-title">{{ item.title }}</span>
-        <i class="brackets el-icon-right"></i>
+        <el-icon class="brackets" :color="'#6366f1'"><ArrowRight /></el-icon>
       </div>
       <!-- 退出登录 -->
       <div class="logout">
@@ -56,43 +58,61 @@
 
 <script>
 import { ElMessage } from "element-plus";
+import { 
+  Plus, 
+  Headset, 
+  Star, 
+  CirclePlus, 
+  Message, 
+  Setting, 
+  ArrowRight 
+} from '@element-plus/icons-vue';
 import path from "path-browserify";
 import { mapState } from "vuex";
 
 export default {
   inject: ["reload"],
   name: "",
+  components: {
+    Plus,
+    Headset,
+    Star,
+    CirclePlus,
+    Message,
+    Setting,
+    ArrowRight
+  },
   data() {
     return {
       listTitle: [
         {
           id: 1,
           title: "我喜欢的音乐",
-          icon: "el-icon-headset",
+          icon: "Headset",
           value: "likeMusic",
         },
         {
           id: 2,
           title: "收藏歌单",
-          icon: "el-icon-star-off",
+          icon: "Star",
           value: "collectSongList",
         },
         {
           id: 3,
           title: "创建歌单",
-          icon: "el-icon-circle-plus-outline",
+          icon: "CirclePlus",
           value: "createSongList",
         },
         { 
           id: 4, 
           title: "消息通知", 
-          icon: "el-icon-message", 
+          icon: "Message", 
           value: "message" 
         },
         {
            id: 5,
            title: "设置", 
-           icon: "el-icon-setting", 
+           icon: "Setting", 
            value: "setting"
        },
       ],
@@ -244,6 +264,10 @@ export default {
     background: #f8fafc;
     border: 2.5px solid #e0e7ff;
   }
+  .uploadIcon {
+    font-size: 24px;
+    color: #bfcfff;
+  }
 }
 .mine-username {
   display: block;
@@ -284,7 +308,6 @@ export default {
 .icon {
   font-size: 22px;
   margin-right: 12px;
-  color: #6366f1;
 }
 .mine-list-title {
   font-size: 0.4rem;
@@ -295,7 +318,6 @@ export default {
 .brackets {
   font-size: 15px;
   margin-left: 8px;
-  color: #bfcfff;
   line-height: 1;
 }
 .logout {
