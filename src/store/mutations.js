@@ -86,5 +86,8 @@ const mutations = {
   [types.SET_ALL_MESSAGE](state, allMessage) {
     state.allMessage = allMessage;
   },
+  [types.SET_COLLECT_SONG_LIST](state, list) {
+    state.collectSongList = list; // 必须整体替换，不能直接 push/pop
+  },
  }
  export default mutations;

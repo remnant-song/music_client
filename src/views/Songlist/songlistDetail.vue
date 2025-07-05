@@ -45,10 +45,10 @@
           </div>
           <div class="playlist-actions">
             <el-button
-              v-if="!listMessage.isLike"
+              v-if="!checkList1"
               type="primary"
               :icon="Plus"
-              @click="collectSongList"
+              @click="collectSongList11"
               class="collect-btn"
             >
               收藏歌单
@@ -135,9 +135,13 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["listMessage", "musicList"]),
+    ...mapGetters(["listMessage", "musicList","collectSongList"]),
     title() {
       return this.listMessage.name;
+    },
+    checkList1(){
+      this.$store.dispatch("gainCollectSongList");
+      return this.collectSongList.some(item=>item.id===this.listMessage.id)
     },
   },
   watch: {
@@ -149,17 +153,20 @@ export default {
             "gainSongListDetail",
             newValue ? newValue : oldValue
           );
+          this.$store.dispatch("gainCollectSongList");
       },
     },
   },
   methods: {
+
     // 收藏歌单
-    collectSongList() {
+    collectSongList11() {
       if (localStorage.getItem("token")) {
         this.listMessage.isLike = true;
         if (this.listMessage.isLike) {
           this.$store.dispatch("collectMusicList", this.$route.params.id);
         }
+        this.$store.dispatch("gainCollectSongList");
       } else {
         this.$message.warning("请先登录");
       }
