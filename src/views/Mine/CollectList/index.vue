@@ -138,12 +138,25 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  overflow-x: hidden;
+  touch-action: pan-y;
 }
 
 .collect-content {
   max-width: 480px;
   width: 100%;
   margin: 0 auto;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 80px;
+  bottom: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 10px;
+  box-sizing: border-box;
+  touch-action: pan-y;
 }
 
 .stats-section {
@@ -221,6 +234,10 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(191,207,255,0.10), 0 1px 3px 0 rgba(0,0,0,0.04);
   padding: 24px;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  touch-action: pan-y;
 }
 
 .playlist-header {
@@ -321,7 +338,7 @@ export default {
 }
 
 .playlist-name {
-  font-size: 0.4rem;
+  font-size: 0.352rem;
   font-weight: 600;
   color: #22223b;
   margin: 0 0 8px 0;
@@ -332,7 +349,7 @@ export default {
 }
 
 .playlist-creator {
-  font-size: 0.32rem;
+  font-size: 0.264rem;
   color: #6366f1;
   margin: 0;
   opacity: 0.8;
@@ -392,6 +409,8 @@ export default {
 @media (max-width: 480px) {
   .collect-content {
     padding: 0 10px;
+    width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
   }
   
   .stats-card {

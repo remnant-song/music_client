@@ -26,7 +26,11 @@ export default {
   components: { Search },
   methods: {
     toSearch() {
-      this.$router.push({ path: "/search" });
+      // 记录当前页面路径，用于返回时判断
+      this.$router.push({ 
+        path: "/search",
+        query: { from: this.$route.path }
+      });
     },
   },
 };

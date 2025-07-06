@@ -101,7 +101,19 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.back();
+      // 根据来源页面进行返回
+      const fromPath = this.$route.query.from;
+      if (fromPath) {
+        this.$router.push(fromPath);
+      } else {
+        // 如果没有指定来源，尝试返回到上一个页面
+        // 如果历史记录为空，则返回到首页
+        if (window.history.length > 1) {
+          this.$router.back();
+        } else {
+          this.$router.push('/');
+        }
+      }
       this.keyword = "";
       this.clickFlag = false;
     },
