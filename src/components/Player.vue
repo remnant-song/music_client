@@ -145,13 +145,22 @@
       </div>
     </transition>
     <audio
-      :src="currentSong.musicUrl"
+      v-if="hasValidAudio"
       ref="audio"
       @play="ready"
       @error="error"
       @timeupdate="updateTime"
       @ended="ended"
+      @loadstart="onLoadStart"
+      @canplay="onCanPlay"
+      @loaderror="onLoadError"
     ></audio>
+    <!-- 调试信息 -->
+    <div v-if="!hasValidAudio" style="display: none;">
+      <p>调试信息: 没有有效的音频源</p>
+      <p>fullCurrentSong: {{ JSON.stringify(fullCurrentSong) }}</p>
+      <p>audioSrc: {{ audioSrc }}</p>
+    </div>
   </div>
 </template>
 <script>
@@ -208,6 +217,13 @@ export default {
   mounted() {
     // 监听浏览器返回按钮，当在播放界面时关闭播放界面
     window.addEventListener('popstate', this.handlePopState);
+    
+    // 初始化音频源
+    this.$nextTick(() => {
+      if (this.hasValidAudio) {
+        this.loadAudioThroughProxy();
+      }
+    });
   },
   beforeUnmount() {
     // 移除事件监听器
@@ -238,6 +254,73 @@ export default {
         ? "icon-loop"
         : "icon-random";
     },
+    // 获取完整的歌曲信息，优先使用详情中的信息
+    fullCurrentSong() {
+      const songDetail = this.songDetailByMusicId;
+      const currentSong = this.currentSong;
+      
+      console.log('fullCurrentSong计算:', {
+        songDetail,
+        currentSong,
+        songDetailMusicId: songDetail?.musicId,
+        currentSongMusicId: currentSong?.musicId
+      });
+      
+      // 如果详情中有完整信息，使用详情
+      if (songDetail && songDetail.musicId === currentSong.musicId) {
+        const mergedSong = { ...currentSong, ...songDetail };
+        console.log('合并后的歌曲信息:', mergedSong);
+        return mergedSong;
+      }
+      
+      console.log('使用原始歌曲信息:', currentSong);
+      return currentSong;
+    },
+    audioSrc() {
+      // 处理音乐文件URL，确保使用正确的路径
+      console.log('audioSrc计算 - fullCurrentSong:', this.fullCurrentSong);
+      
+      if (!this.fullCurrentSong || !this.fullCurrentSong.musicUrl) {
+        console.warn('音乐URL为空:', this.fullCurrentSong);
+        // 临时测试：使用一个已知存在的MP3文件
+        return '';
+      }
+      
+      let finalUrl = this.fullCurrentSong.musicUrl;
+      console.log('原始musicUrl:', finalUrl);
+      
+      // 如果URL已经是完整路径，直接返回
+      if (finalUrl.startsWith('http')) {
+        console.log('使用完整URL:', finalUrl);
+        return finalUrl;
+      }
+      
+      // 如果是相对路径，确保以/开头
+      if (finalUrl.startsWith('/')) {
+        console.log('使用相对路径:', finalUrl);
+        return finalUrl;
+      }
+      
+      // 否则添加/前缀
+      finalUrl = '/' + finalUrl;
+      console.log('处理后的URL:', finalUrl);
+      return finalUrl;
+    },
+    hasValidAudio() {
+      const hasSong = !!this.fullCurrentSong;
+      const hasMusicUrl = !!(this.fullCurrentSong && this.fullCurrentSong.musicUrl);
+      const hasAudioSrc = !!this.audioSrc;
+      
+      console.log('hasValidAudio检查:', {
+        hasSong,
+        hasMusicUrl,
+        hasAudioSrc,
+        fullCurrentSong: this.fullCurrentSong,
+        audioSrc: this.audioSrc
+      });
+      
+      return hasSong && hasMusicUrl && hasAudioSrc;
+    },
     ...mapGetters(["fullScreen", "playing", "currentIndex"]),
   },
   watch: {
@@ -248,6 +331,20 @@ export default {
       if (newSong === oldSong) {
         return;
       }
+      
+      console.log('当前歌曲变化:', {
+        newSong,
+        oldSong,
+        musicUrl: newSong.musicUrl
+      });
+      
+      // 检查是否有有效的音频URL
+      if (!newSong.musicUrl) {
+        console.error('当前歌曲没有音频URL:', newSong);
+        this.$message.error('该歌曲暂无音频文件，无法播放');
+        return;
+      }
+      
       // 根据musicId获取音乐详情
       getSongDetailByMusicId(newSong.musicId).then((res) => {
         if (res.code == "50") {
@@ -262,20 +359,38 @@ export default {
         }
       });
 
+      // 通过代理加载音频
+      this.$nextTick(() => {
+        if (this.hasValidAudio) {
+          this.loadAudioThroughProxy();
+        }
+      });
+
       // 防止歌词切换跳动
       if (this.currentLyric) {
         this.currentLyric.stop();
       }
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.$refs.audio.play();
-        this.gainLyric();
+        if (this.$refs.audio) {
+          this.$refs.audio.play();
+          this.gainLyric();
+        }
       }, 1000);
+    },
+    audioSrc(newSrc, oldSrc) {
+      console.log('音频源变化:', {
+        newSrc,
+        oldSrc,
+        currentSong: this.currentSong
+      });
     },
     playing(newPlaying) {
       const audio = this.$refs.audio;
       this.$nextTick(() => {
-        newPlaying ? audio.play() : audio.pause();
+        if (audio && this.hasValidAudio) {
+          newPlaying ? audio.play() : audio.pause();
+        }
       });
     },
   },
@@ -355,9 +470,55 @@ export default {
     // 防止快速点击 产生错误
     ready() {
       this.songReady = true;
+      console.log('音频加载成功:', this.audioSrc);
     },
-    error() {
+    error(e) {
       this.songReady = true;
+      console.error('音频加载失败:', {
+        src: this.audioSrc,
+        currentSong: this.currentSong,
+        error: e
+      });
+      
+      // 显示错误提示
+      this.$message.error('音频文件加载失败，请检查网络连接或联系管理员');
+    },
+    onLoadStart() {
+      console.log('音频开始加载:', this.audioSrc);
+    },
+    onCanPlay() {
+      console.log('音频可以播放:', this.audioSrc);
+    },
+    onLoadError(e) {
+      console.error('音频加载错误:', {
+        src: this.audioSrc,
+        error: e
+      });
+    },
+    // 通过代理获取音频文件
+    async loadAudioThroughProxy() {
+      if (!this.audioSrc) {
+        console.error('音频源为空');
+        return;
+      }
+      
+      try {
+        console.log('通过代理加载音频:', this.audioSrc);
+        
+        // 构建完整的后端URL
+        const backendUrl = `http://192.168.34.208:8007${this.audioSrc}`;
+        console.log('完整后端URL:', backendUrl);
+        
+        // 直接设置音频源为后端URL
+        if (this.$refs.audio) {
+          this.$refs.audio.src = backendUrl;
+          console.log('音频加载成功，直接使用后端URL:', backendUrl);
+        }
+        
+      } catch (error) {
+        console.error('设置音频源失败:', error);
+        this.$message.error('音频文件加载失败，请检查网络连接');
+      }
     },
     // 歌曲前进后退
     prev() {

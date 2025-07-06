@@ -94,10 +94,15 @@ export default {
       methods: {
     ...mapActions(["selectPlay"]),
     selectItem(item, index) {
-      this.$store.dispatch("gainSongDetailByMusicId", item.musicId);
-      this.selectPlay({
-        list: this.hotMusic,
-        index,
+      // 先获取歌曲详情，然后播放
+      this.$store.dispatch("gainSongDetailByMusicId", item.musicId).then(() => {
+        // 等待歌曲详情获取完成后再播放
+        this.$nextTick(() => {
+          this.selectPlay({
+            list: this.hotMusic,
+            index,
+          });
+        });
       });
     },
 }

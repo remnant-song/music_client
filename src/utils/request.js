@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus';
 
 
 const requests = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: '', // 移除baseURL，使用相对路径，通过代理转发
   timeout: 5000,
 });
 
