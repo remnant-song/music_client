@@ -68,13 +68,14 @@ export default {
 .back-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 2px;
+  padding: 7px 11px;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   flex-shrink: 0;
+  min-height: 34px;
   
   &:hover {
     transform: translateY(-1px);
@@ -86,13 +87,14 @@ export default {
   }
   
   .back-icon {
-    font-size: 16px;
+    font-size: 17.6px;
     color: #fff;
+    font-weight: 900;
   }
   
   .back-text {
-    font-size: 0.28rem;
-    font-weight: 600;
+    font-size: 0.308rem;
+    font-weight: 900;
     color: #fff;
   }
 }
@@ -132,14 +134,17 @@ export default {
   }
   
   .back-button {
-    padding: 6px 10px;
+    padding: 5px 9px;
+    min-height: 30px;
     
     .back-icon {
-      font-size: 14px;
+      font-size: 15.4px;
+      font-weight: 900;
     }
     
     .back-text {
-      font-size: 0.24rem;
+      font-size: 0.264rem;
+      font-weight: 900;
     }
   }
   
@@ -161,14 +166,17 @@ export default {
   }
   
   .back-button {
-    padding: 5px 8px;
+    padding: 4px 7px;
+    min-height: 26px;
     
     .back-icon {
-      font-size: 12px;
+      font-size: 13.2px;
+      font-weight: 900;
     }
     
     .back-text {
-      font-size: 0.22rem;
+      font-size: 0.242rem;
+      font-weight: 900;
     }
   }
   
