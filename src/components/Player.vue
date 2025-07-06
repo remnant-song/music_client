@@ -114,8 +114,8 @@
     </transition>
     <!--播放页面小屏 底部-->
     <transition name="mini">
-      <div class="mini-player" v-show="!fullScreen" @click="open">
-        <div class="icon">
+      <div class="mini-player" v-show="!fullScreen">
+        <div class="icon" @click="open">
           <img
             alt=""
             :src="currentSong.imageUrl"
@@ -124,9 +124,23 @@
             :class="cdCls"
           />
         </div>
-        <div class="text">
+        <div class="text" @click="open">
           <h2 class="name" v-html="currentSong.musicName"></h2>
           <p class="desc" v-html="currentSong.userName"></p>
+        </div>
+        <div class="control">
+          <div class="control-btn" @click.stop="prev">
+            <el-icon><CaretLeft /></el-icon>
+          </div>
+          <div class="control-btn" @click.stop="togglePlaying">
+            <el-icon>
+              <VideoPause v-if="playing" />
+              <VideoPlay v-else />
+            </el-icon>
+          </div>
+          <div class="control-btn" @click.stop="next">
+            <el-icon><CaretRight /></el-icon>
+          </div>
         </div>
       </div>
     </transition>
@@ -191,6 +205,15 @@ export default {
     console.log(transitionDuration)
     this.touch = {};
   },
+  mounted() {
+    // 监听浏览器返回按钮，当在播放界面时关闭播放界面
+    window.addEventListener('popstate', this.handlePopState);
+  },
+  beforeUnmount() {
+    // 移除事件监听器
+    window.removeEventListener('popstate', this.handlePopState);
+  },
+
   // 填充歌曲信息 控制歌曲播放
   computed: {
     cdCls() {
@@ -393,8 +416,20 @@ export default {
     back() {
       this.setFullScreen(false);
     },
+    handlePopState(event) {
+      // 如果当前在播放界面，关闭播放界面而不是返回上一页
+      if (this.fullScreen) {
+        this.setFullScreen(false);
+        // 阻止默认的返回行为，因为我们只是关闭播放界面
+        event.preventDefault();
+        return false;
+      }
+    },
+
     open() {
       this.setFullScreen(true);
+      // 添加历史记录状态，这样手机返回键才能被捕获
+      window.history.pushState({ player: 'fullscreen' }, null, window.location.href);
     },
     // 设置playing状态 watch playing的变化 实现播放暂停
     togglePlaying() {
@@ -813,7 +848,10 @@ export default {
   z-index: 180;
   width: 100%;
   height: 60px;
-  background: #333;
+  background: linear-gradient(135deg, #333 0%, #444 100%);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .player .mini-player.mini-enter-active,
 .player .mini-player.mini-leave-active {
@@ -831,6 +869,8 @@ export default {
 }
 .player .mini-player .icon img {
   border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 .player .mini-player .icon img.play {
   animation: rotate 10s linear infinite;
@@ -867,24 +907,44 @@ export default {
   margin: 0;
   color: rgba(255, 255, 255, 0.3);
 }
+
 .player .mini-player .control {
-  -ms-flex: 0 0 30px;
-  flex: 0 0 30px;
-  width: 30px;
-  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
 }
-.player .mini-player .control .icon-play-mini,
-.player .mini-player .control .icon-pause-mini,
-.player .mini-player .control .icon-playlist {
-  font-size: 30px;
-  color: rgba(255, 205, 49, 0.5);
+
+.player .mini-player .control .control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.player .mini-player .control .icon-mini {
-  font-size: 32px;
-  position: absolute;
-  left: 0;
-  top: 0;
+
+.player .mini-player .control .control-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
+
+.player .mini-player .control .control-btn:active {
+  transform: scale(0.95);
+}
+
+.player .mini-player .control .control-btn .el-icon {
+  font-size: 16px;
+  color: #fff;
+}
+
+.player .mini-player .control .control-btn:nth-child(2) .el-icon {
+  font-size: 18px;
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0);
