@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus';
 
 const requests = axios.create({
   baseURL: '', // 移除baseURL，使用相对路径，通过代理转发
-  timeout: 5000,
+  timeout: 20000,
 });
 
 // 请求拦截器

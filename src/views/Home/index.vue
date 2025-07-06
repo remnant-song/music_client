@@ -26,13 +26,12 @@
 <script>
 import slider from "../../components/Slider.vue";
 import { mapActions, mapGetters } from "vuex";
-
-import swiper1 from "@/assets/image/swiper1.png";
-import swiper2 from "@/assets/image/swiper2.png";
-import swiper3 from "@/assets/image/swiper3.png";
-import swiper4 from "@/assets/image/swiper4.png";
-import swiper5 from "@/assets/image/swiper5.png";
-import swiper6 from "@/assets/image/swiper6.png";
+import swiper1 from "@/assets/image/swiper1.jpg";
+import swiper2 from "@/assets/image/swiper2.jpg";
+import swiper3 from "@/assets/image/swiper3.jpg";
+import swiper4 from "@/assets/image/swiper4.jpg";
+import swiper5 from "@/assets/image/swiper5.jpg";
+import swiper6 from "@/assets/image/swiper6.jpg";
 
 
 export default {

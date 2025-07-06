@@ -1,52 +1,103 @@
 <!-- 登录 -->
 <template>
-  <div>
+  <div class="login-main-container">
     <PageHeader 
       title="登录" 
       subtitle="欢迎回来"
       @back="goBack"
     />
-    <el-form :model="loginForm" ref="loginFormRef" status-icon>
-      <div class="bform">
-        <el-form-item prop="username">
-          <el-input
-            type="text"
-            v-model="loginForm.username"
-            autocomplete="off"
-            placeholder="用户名/手机号/邮箱"
-          />
-        </el-form-item>
-        <el-form-item prop="password" :rules="rules.passwordRules">
-          <el-input
-            type="password"
-            v-model="loginForm.password"
-            autocomplete="off"
-            placeholder="密码"
-            @keyup.enter="handleLogin('loginFormRef')"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            @click="handleLogin('loginFormRef')"
-            round
-            class="login"
-            >登录</el-button
-          >
-          <span class="toRegister" @click="toRegister">注册</span>
-        </el-form-item>
+    
+    <div class="login-content">
+      <!-- 欢迎区域 -->
+      <div class="welcome-section">
+        <div class="welcome-icon">
+          <el-icon class="music-icon"><Headset /></el-icon>
+        </div>
+        <h2 class="welcome-title">欢迎回来</h2>
+        <p class="welcome-subtitle">登录您的音乐账户，开始您的音乐之旅</p>
       </div>
-    </el-form>
+
+      <!-- 登录表单 -->
+      <div class="form-container">
+        <div class="form-header">
+          <h3 class="form-title">账户登录</h3>
+        </div>
+        
+        <el-form 
+          :model="loginForm" 
+          ref="loginFormRef" 
+          status-icon
+          class="login-form"
+        >
+          <el-form-item prop="username" class="form-item">
+            <el-input
+              v-model="loginForm.username"
+              placeholder="用户名/手机号/邮箱"
+              class="form-input"
+              size="large"
+              :prefix-icon="User"
+            />
+          </el-form-item>
+          
+          <el-form-item prop="password" :rules="rules.passwordRules" class="form-item">
+            <el-input
+              type="password"
+              v-model="loginForm.password"
+              placeholder="密码"
+              class="form-input"
+              size="large"
+              :prefix-icon="Lock"
+              @keyup.enter="handleLogin('loginFormRef')"
+              show-password
+            />
+          </el-form-item>
+          
+          <el-form-item class="form-item">
+            <el-button
+              type="primary"
+              @click="handleLogin('loginFormRef')"
+              :loading="loading"
+              class="login-btn"
+              size="large"
+            >
+              <el-icon v-if="!loading"><Right /></el-icon>
+              {{ loading ? '登录中...' : '登录' }}
+            </el-button>
+          </el-form-item>
+        </el-form>
+        
+        <!-- 其他操作 -->
+        <div class="form-footer">
+          <span class="register-link" @click="toRegister">
+            还没有账户？立即注册
+          </span>
+        </div>
+      </div>
+      
+      <!-- 装饰元素 -->
+      <div class="decoration-elements">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { User, Lock, Right, Headset } from '@element-plus/icons-vue';
 import rules from "../../utils/validator.js";
 import PageHeader from '@/components/PageHeader.vue';
 
 export default {
   inject: ["reload"],
-  components: { PageHeader },
+  components: { 
+    PageHeader,
+    User,
+    Lock,
+    Right,
+    Headset
+  },
   data() {
     return {
       loginForm: {
@@ -54,34 +105,35 @@ export default {
         password: "",
       },
       rules,
+      loading: false,
     };
   },
   methods: {
     handleLogin(loginFormRef) {
       this.$refs.loginFormRef.validate((valid) => {
         if (valid) {
+          this.loading = true;
           this.$store
             .dispatch("login", this.loginForm)
             .then(() => {
+              this.$message.success('登录成功！');
               this.$router.push({
                 path: "/mine",
               });
               // 登录成功之后，mine页面刷新一次显示用户名和头像
               this.reload();
             })
-            .catch(() => {});
+            .catch(() => {
+              this.loading = false;
+            });
         } else {
-          this.$notify.error({
-            title: " 错误",
-            message: " 请输入正确的用户名密码",
-          });
+          this.$message.error("请输入正确的用户名和密码");
           return false;
         }
       });
     },
     // 返回
     goBack() {
-      // this.$router.back(-1);
       this.$router.push({ path: "/mine" });
       this.$refs.loginFormRef.resetFields();
     },
@@ -95,21 +147,301 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
-/* 移除旧的导航栏样式 */
-.bform {
-  width: 100%;
-  height: 100%;
-  padding: 20px 0px;
+.login-main-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  padding: 15.6px 6.5px 20.8px 6.5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
-  margin-top: 50px;
+  position: relative;
+  overflow-x: hidden;
+  touch-action: pan-y;
 }
-.toRegister {
-  font-size: 12px;
-  margin-left: 85px;
-  color: #999;
+
+.login-content {
+  max-width: 312px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 26px;
+  padding: 26px 13px;
+}
+
+.welcome-icon {
+  margin-bottom: 13px;
+  
+  .music-icon {
+    font-size: 29.25px;
+    color: #6366f1;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.welcome-title {
+  font-size: 0.585rem;
+  font-weight: 700;
+  color: #22223b;
+  margin: 0 0 7.8px 0;
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+}
+
+.welcome-subtitle {
+  font-size: 0.2925rem;
+  color: #6366f1;
+  opacity: 0.8;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form-container {
+  background: #fff;
+  border-radius: 13px;
+  box-shadow: 0 1.3px 7.8px 0 rgba(191,207,255,0.10), 0 0.65px 1.95px 0 rgba(0,0,0,0.04);
+  padding: 20.8px 15.6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 20.8px;
+}
+
+.form-title {
+  font-size: 0.455rem;
+  font-weight: 600;
+  color: #22223b;
+  margin: 0 0 5.2px 0;
+  line-height: 1.3;
+}
+
+.form-subtitle {
+  font-size: 0.27625rem;
+  color: #6366f1;
+  opacity: 0.7;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.login-form {
+  .form-item {
+    margin-bottom: 15.6px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  .form-input {
+    :deep(.el-input__wrapper) {
+      background: #f8fafc;
+      border: 1.3px solid transparent;
+      border-radius: 7.8px;
+      box-shadow: none;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        border-color: #e0e7ff;
+        background: #fff;
+      }
+      
+      &.is-focus {
+        border-color: #6366f1;
+        background: #fff;
+        box-shadow: 0 0 0 1.95px rgba(99,102,241,0.1);
+      }
+    }
+    
+    :deep(.el-input__inner) {
+      height: 31.2px;
+      font-size: 0.2925rem;
+      color: #22223b;
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+    
+    :deep(.el-input__prefix) {
+      color: #6366f1;
+      font-size: 5.85px;
+    }
+  }
+}
+
+.login-btn {
+  width: 100%;
+  height: 31.2px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 7.8px;
+  font-weight: 600;
+  font-size: 0.30875rem;
+  box-shadow: 0 2.6px 7.8px 0 rgba(99,102,241,0.3);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-1.3px);
+    box-shadow: 0 3.9px 13px 0 rgba(99,102,241,0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  .el-icon {
+    margin-right: 5.2px;
+  }
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 15.6px;
+  padding-top: 15.6px;
+  border-top: 0.65px solid #f1f5f9;
+}
+
+.register-link {
+  font-size: 0.27625rem;
+  color: #6366f1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  
+  &:hover {
+    color: #4f46e5;
+    text-decoration: underline;
+  }
+}
+
+.decoration-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 78px;
+  height: 78px;
+  top: 10%;
+  right: -39px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 52px;
+  height: 52px;
+  bottom: 20%;
+  left: -26px;
+  animation-delay: 2s;
+}
+
+.circle-3 {
+  width: 39px;
+  height: 39px;
+  top: 60%;
+  right: 10%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+// 响应式设计
+@media (max-width: 480px) {
+  .login-main-container {
+    padding: 10.4px 5.2px 15.6px 5.2px;
+  }
+  
+  .login-content {
+    max-width: 260px;
+  }
+  
+  .welcome-section {
+    padding: 19.5px 10.4px;
+    margin-bottom: 19.5px;
+  }
+  
+  .welcome-title {
+    font-size: 0.52rem;
+  }
+  
+  .form-container {
+    padding: 15.6px 13px;
+  }
+  
+  .form-title {
+    font-size: 0.4225rem;
+  }
+  
+  .decoration-circle {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-content {
+    max-width: 234px;
+  }
+  
+  .welcome-section {
+    padding: 13px 7.8px;
+  }
+  
+  .form-container {
+    padding: 13px 10.4px;
+  }
+  
+  .login-form .form-input :deep(.el-input__inner) {
+    height: 28.6px;
+    font-size: 0.26rem;
+  }
+  
+  .login-btn {
+    height: 28.6px;
+  }
+}
+
+@media (max-width: 280px) {
+  .login-content {
+    max-width: 208px;
+  }
+  
+  .welcome-section {
+    padding: 10.4px 5.2px;
+  }
+  
+  .form-container {
+    padding: 10.4px 7.8px;
+  }
 }
 </style>
