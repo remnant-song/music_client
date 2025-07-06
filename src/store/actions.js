@@ -34,13 +34,20 @@ import{addSong} from "../api/mine";
 import{getAllMessage} from "../api/message";
 import{settingUserInfo} from "../api/mine";
 import{editPassword} from "../api/login";
-
+import { getMainRecommendList } from "@/api/rank";
 
 function findIndex(list, song) {
     return list.findIndex((item) => {
       return item.id === song.id;
     });
   }
+
+//主页推荐歌曲
+export const gainMainRecommendList = ({ commit }) => {
+      getMainRecommendList().then((res) => {
+        commit("SET_MAIN_RECOMMEND_LIST", res.data);
+      });
+  };
 
 
   export const gainSongDetailByMusicId = ({ commit }, musicId) => {

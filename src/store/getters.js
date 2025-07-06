@@ -9,6 +9,9 @@ export const currentSong = (state) => {
 };
 export const songDetailByMusicId = (state) => state.songDetailByMusicId || {};
 
+//主页推荐歌单
+export const MainRecommendList = (state) => state.MainRecommendList || {};
+
 // 获取歌曲排行榜列表（推荐歌曲列表）24
 export const SongListRank = (state) => state.SongListRank || {};
 // 获取推荐歌手

@@ -50,6 +50,8 @@ const state = {
     // 根据关键字查询各类排行榜下的歌曲
   songsByRank: [],
 
+    //主页推荐歌单  
+    MainRecommendList: [],
 
     // 推荐歌单
   recommendList: [],

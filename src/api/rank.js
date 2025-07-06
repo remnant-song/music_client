@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 
-
+//获取主页推荐歌曲
+export function getMainRecommendList() {
+  return request({
+    url: "/music/MainRecommend",
+    method: "get",
+  });
+}
 // 获取歌曲排行（推荐歌曲）
 export function getSongListRank() {
   return request({

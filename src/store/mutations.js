@@ -33,6 +33,12 @@ const mutations = {
     state.songDetailBySingerId = songDetailBySingerId;
   },  
 
+  //主页推荐歌单
+  [types.SET_MAIN_RECOMMEND_LIST](state, MainRecommendList) {     //24
+    state.MainRecommendList = MainRecommendList;
+  },
+
+
     // 获取歌曲排行榜列表
   [types.SET_SONG_LIST_RANK](state, SongListRank) {
     state.SongListRank = SongListRank;

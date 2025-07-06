@@ -38,37 +38,6 @@ export default {
   components: {
     slider,
   },
-  // data() {
-  //   return {
-  //     // 首页轮播图
-  //     sliderList: [
-  //              {
-  //         name: "001",
-  //         url: new URL("/image/swiper1.png", import.meta.url).href,
-  //       },
-  //       {
-  //         name: "002",
-  //         url: new URL("/image/swiper2.png", import.meta.url).href,
-  //       },
-  //       {
-  //         name: "003",
-  //         url: new URL("/image/swiper3.png", import.meta.url).href,
-  //       },
-  //       {
-  //         name: "004",
-  //         url: new URL("/image/swiper4.png", import.meta.url).href,
-  //       },
-  //       {
-  //         name: "005",
-  //         url: new URL("/image/swiper5.png", import.meta.url).href,
-  //       },
-  //       {
-  //         name: "006",
-  //         url: new URL("/image/swiper6.png", import.meta.url).href,
-  //       },
-  //     ],
-  //   };
-  // },
       data() {
     return {
       sliderList: [
@@ -82,12 +51,13 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("gainSongListRank");
+    // this.$store.dispatch("gainSongListRank");
+    this.$store.dispatch("gainMainRecommendList");
   },
     computed: {
-    ...mapGetters({ recommendList: "SongListRank" }),
+    ...mapGetters({ recommendList: "MainRecommendList" }),
     hotMusic() {
-      return this.recommendList.hotMusic;
+      return this.recommendList.mainList;
     },
     },
       methods: {
