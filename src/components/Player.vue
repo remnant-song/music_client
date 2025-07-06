@@ -177,6 +177,7 @@ import { ElMessage } from "element-plus";
 import { getSongDetailByMusicId } from "../api/songlist";
 import { getLyric } from "../api/common";
 import { ArrowLeft, Star, StarFilled, CaretLeft, CaretRight, VideoPause, VideoPlay } from '@element-plus/icons-vue';
+import { BASE_API } from '../common/config';
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
@@ -506,7 +507,8 @@ export default {
         console.log('通过代理加载音频:', this.audioSrc);
         
         // 构建完整的后端URL
-        const backendUrl = `http://192.168.34.208:8007${this.audioSrc}`;
+        const backendUrl = `${BASE_API}${this.audioSrc}`;
+        // const backendUrl = `http://192.168.2.7:8007${this.audioSrc}`;
         console.log('完整后端URL:', backendUrl);
         
         // 直接设置音频源为后端URL

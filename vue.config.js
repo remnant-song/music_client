@@ -1,8 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
 const path = require('path')
 
+
 // 提取后端服务器地址到变量
-const BACKEND_HOST = 'http://192.168.34.208'
+const BACKEND_HOST = 'http://192.168.2.7'
 
 // 通用的代理配置函数
 const createProxy = (port) => ({
