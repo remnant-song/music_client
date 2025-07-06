@@ -115,7 +115,7 @@ export default {
       },
       rules, // 封装好的表单验证
       saving: false,
-      actionUrl: process.env.BASE_URL + "/upload/upImage", // 上传图片的目的地址
+      actionUrl: "/upload/upImage", // 上传图片的目的地址
     };
   },
   mounted() {

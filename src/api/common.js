@@ -1,4 +1,6 @@
 import request from '@/utils/request'
+import axios from 'axios'
+
 export function getLyric(lyricUrl) {
  return axios.get(lyricUrl);
 }

@@ -179,7 +179,7 @@ export default {
         message: "",
         tags: "",
       },
-      actionUrl: process.env.BASE_URL + "/upload/upImage", // 上传图片的目的地址
+      actionUrl: "/upload/upImage", // 上传图片的目的地址
     };
   },
   mounted() {
