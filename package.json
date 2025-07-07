@@ -14,7 +14,7 @@
     "core-js": "^3.8.3",
     "create-keyframe-animation": "^0.1.0",
     "echarts": "^5.6.0",
-    "element-plus": "^2.10.2",
+    "element-plus": "^2.10.3",
     "lodash-es": "^4.17.21",
     "lyric-parser": "^1.0.1",
     "swiper": "^11.2.10",

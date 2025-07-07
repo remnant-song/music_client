@@ -9,8 +9,12 @@ const state = {
   playList: [],
   // 顺序歌曲播放列表 Array
   sequenceList: [],
+
+
   // 播放模式 Object
   mode: playMode.sequence,
+
+  
   // 当前播放歌曲索引
   currentIndex: -1,
   // 根据musicId拿到歌曲详细信息

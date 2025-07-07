@@ -96,17 +96,23 @@
             </div>
           </div>
           <div class="operators">
-            <div class="icon i-left" :class="disableCls">
-              <el-icon @click="prev"><CaretLeft /></el-icon>
+            <div class="center-group">
+              <div class="icon i-left" :class="disableCls">
+                <el-icon @click="prev"><CaretLeft /></el-icon>
+              </div>
+              <div class="icon i-center" :class="disableCls">
+                <el-icon @click="togglePlaying">
+                  <VideoPause v-if="playing" />
+                  <VideoPlay v-else />
+                </el-icon>
+              </div>
+              <div class="icon i-right" :class="disableCls">
+                <el-icon @click="next"><CaretRight /></el-icon>
+              </div>
             </div>
-            <div class="icon i-center" :class="disableCls">
-              <el-icon @click="togglePlaying">
-                <VideoPause v-if="playing" />
-                <VideoPlay v-else />
-              </el-icon>
-            </div>
-            <div class="icon i-right" :class="disableCls">
-              <el-icon @click="next"><CaretRight /></el-icon>
+            <!-- 播放模式切换按钮 -->
+            <div class="icon i-mode" @click="changeMode">
+              <img :src="modeIcon" alt="mode" style="width: 0.96em; height: 0.96em; vertical-align: middle;" />
             </div>
           </div>
         </div>
@@ -176,7 +182,7 @@ import { playerMixin } from "../common/mixin";
 import { ElMessage } from "element-plus";
 import { getSongDetailByMusicId } from "../api/songlist";
 import { getLyric } from "../api/common";
-import { ArrowLeft, Star, StarFilled, CaretLeft, CaretRight, VideoPause, VideoPlay } from '@element-plus/icons-vue';
+import { ArrowLeft, Star, StarFilled, CaretLeft, CaretRight, VideoPause, VideoPlay, Refresh, Sort, Shuffle } from '@element-plus/icons-vue';
 import { BASE_API } from '../common/config';
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
@@ -208,6 +214,9 @@ export default {
     CaretRight,
     VideoPause,
     VideoPlay,
+    Refresh,
+    Sort,
+    Shuffle,
   },
   // 滑动touch
   created() {
@@ -254,6 +263,14 @@ export default {
         : this.mode === playMode.loop
         ? "icon-loop"
         : "icon-random";
+    },
+    modeIcon() {
+      switch (this.mode) {
+        case playMode.sequence: return require('@/assets/image/orader.svg');
+        case playMode.loop: return require('@/assets/image/circulation.svg');
+        case playMode.random: return require('@/assets/image/random.svg');
+        default: return require('@/assets/image/orader.svg');
+      }
     },
     // 获取完整的歌曲信息，优先使用详情中的信息
     fullCurrentSong() {
@@ -322,7 +339,7 @@ export default {
       
       return hasSong && hasMusicUrl && hasAudioSrc;
     },
-    ...mapGetters(["fullScreen", "playing", "currentIndex"]),
+    ...mapGetters(["fullScreen", "playing", "currentIndex", "mode"]),
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -530,9 +547,18 @@ export default {
       if (this.playList.length === 1) {
         this.loop();
       } else {
-        let index = this.currentIndex - 1;
-        if (index === -1) {
-          index = this.playList.length - 1;
+        let index;
+        if (this.mode === playMode.random) {
+          // 随机模式
+          do {
+            index = Math.floor(Math.random() * this.playList.length);
+          } while (index === this.currentIndex && this.playList.length > 1);
+        } else {
+          // 顺序/循环
+          index = this.currentIndex - 1;
+          if (index < 0) {
+            index = this.playList.length - 1;
+          }
         }
         this.setCurrentIndex(index);
         if (!this.playing) {
@@ -545,13 +571,21 @@ export default {
       if (!this.songReady) {
         return;
       }
-      // 列表只有一首歌曲则单曲循环
       if (this.playList.length === 1) {
         this.loop();
       } else {
-        let index = this.currentIndex + 1;
-        if (index === this.playList.length) {
-          index = 0;
+        let index;
+        if (this.mode === playMode.random) {
+          // 随机模式
+          do {
+            index = Math.floor(Math.random() * this.playList.length);
+          } while (index === this.currentIndex && this.playList.length > 1);
+        } else {
+          // 顺序/循环
+          index = this.currentIndex + 1;
+          if (index === this.playList.length) {
+            index = 0;
+          }
         }
         this.setCurrentIndex(index);
         if (!this.playing) {
@@ -753,6 +787,17 @@ export default {
     ...mapMutations({
       setFullScreen: "SET_FULL_SCREEN",
     }),
+    changeMode() {
+      const newMode = (this.mode + 1) % 3;
+      this.$store.commit('SET_PLAY_MODE', newMode);
+      let msg = '';
+      switch (newMode) {
+        case playMode.sequence: msg = '顺序播放'; break;
+        case playMode.loop: msg = '单曲循环'; break;
+        case playMode.random: msg = '随机播放'; break;
+      }
+      this.$message.success(`已切换为${msg}`);
+    },
   },
   beforeUpdate() {
     this.lyricLineRefs = [];
@@ -946,37 +991,55 @@ export default {
   flex: 1;
 }
 .player .normal-player .bottom .operators {
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: center;
   align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 0;
+}
+.player .normal-player .bottom .operators .center-group {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex: 1;
+  justify-content: center;
+  margin-left: 32px;
+}
+.player .normal-player .bottom .operators .i-mode {
+  margin-right: 32px;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  font-size: 26px;
+  cursor: pointer;
+  color: #ffcd32;
+  transition: color 0.2s;
+}
+.player .normal-player .bottom .operators .i-mode:hover {
+  color: #ffb300;
 }
 .player .normal-player .bottom .operators .icon {
-  -ms-flex: 1;
-  flex: 1;
-  color: #ffcd32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
 }
-.player .normal-player .bottom .operators .icon.disable {
-  color: rgba(255, 205, 49, 0.5);
-}
-.player .normal-player .bottom .operators .icon i {
-  font-size: 30px;
-}
-.player .normal-player .bottom .operators .i-left {
-  text-align: right;
+.player .normal-player .bottom .operators .icon:active {
+  transform: scale(0.92);
 }
 .player .normal-player .bottom .operators .i-center {
-  padding: 0 20px;
-  text-align: center;
+  font-size: 38px;
+  margin: 0 18px;
+  color: #4FC3F7;
 }
-.player .normal-player .bottom .operators .i-center i {
-  font-size: 40px;
+.player .normal-player .bottom .operators .i-left, .player .normal-player .bottom .operators .i-right {
+  color: #4FC3F7;
 }
-.player .normal-player .bottom .operators .i-right {
-  text-align: left;
-}
-.player .normal-player .bottom .operators .icon-favorite {
-  color: #d93f30;
+.player .normal-player .bottom .operators .icon.disable {
+  color: rgba(99, 102, 241, 0.4);
+  cursor: not-allowed;
 }
 .player .normal-player.normal-enter-active,
 .player .normal-player.normal-leave-active {
@@ -1123,5 +1186,67 @@ export default {
   color: #fff !important;
   font-size: 32px !important;
   vertical-align: middle;
+}
+.operators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 0;
+}
+.operators .center-group {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex: 1;
+  justify-content: center;
+  margin-left: 32px;
+}
+.operators .i-mode {
+  margin-right: 32px;
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  font-size: 26px;
+  cursor: pointer;
+  color: #ffcd32;
+  transition: color 0.2s;
+}
+.operators .i-mode:hover {
+  color: #ffb300;
+}
+.operators .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+.operators .icon:active {
+  transform: scale(0.92);
+}
+.operators .i-center {
+  font-size: 38px;
+  margin: 0 18px;
+  color: #4FC3F7;
+}
+.operators .i-left, .operators .i-right {
+  color: #4FC3F7;
+}
+.operators .icon.disable {
+  color: rgba(99, 102, 241, 0.4);
+  cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  .operators .i-mode {
+    margin-right: 12px;
+    margin-left: 0;
+    font-size: 22px;
+  }
+  .operators .center-group {
+    gap: 16px;
+    margin-left: 8px;
+  }
 }
 </style>

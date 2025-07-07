@@ -4,7 +4,7 @@ import { playMode } from "../common/config";
 import { getSongListRank } from '@/api/rank';
 import { getRecommendSinger } from "@/api/singer";
 import { getSongsByRank } from '@/api/rank'
-
+// import { shuffle } from "lodash-es";
 import { getRecommendList } from '@/api/songlist'
 
 import { setHeadImage } from "@/api/login";
@@ -21,7 +21,7 @@ import{toRegister} from "@/api/login";
 import { getSongBySingerId } from "@/api/singer";
 import { ElMessage } from "element-plus";
 import { getSongListDetail } from "@/api/songlist";
-// import{shuffle} from "../utils";
+import shuffle from '@/utils/shuffle'
 import{getMyLikeMusic} from "../api/mine";
 import{getCollectSongList} from "../api/songlist";
 import{removeCollectSongList} from "../api/mine";
@@ -58,25 +58,18 @@ export const gainMainRecommendList = ({ commit }) => {
 
   // 跳转到音乐播放页面（Player组件）
 export const selectPlay = ({ commit, state }, { list, index }) => {
-    // 提交设置歌曲列表
-    commit(types.SET_SEQUENCE_LIST, list);
     if (state.mode === playMode.random) {
-      let randomList = shuffle(list);
-      commit(types.SET_PLAYLIST, randomList);
-      index = findIndex(randomList, list[index]);
-      commit(types.SET_CURRENT_INDEX, index);
+      let newList = shuffle(list)
+      commit('SET_PLAYLIST', newList)
+      let song = list[index]
+      let newIndex = newList.findIndex(item => item.musicId === song.musicId)
+      commit('SET_CURRENT_INDEX', newIndex)
     } else {
-      // 设置播放列表
-      commit(types.SET_PLAYLIST, list);
-  
-      // 设置当前播放歌曲的索引
-      commit(types.SET_CURRENT_INDEX, index);
+      commit('SET_PLAYLIST', list)
+      commit('SET_CURRENT_INDEX', index)
     }
-    // 设置播放器状态 全屏 or 小屏
-    commit(types.SET_FULL_SCREEN, true);
-  
-    // 设置播放状态 播放 or 暂停
-    commit(types.SET_PLAYING_STATE, true);
+    commit('SET_FULL_SCREEN', true)
+    commit('SET_PLAYING_STATE', true)
   };
   // 添加到我喜欢的音乐
 export const addLikeSong = ({ commit }, musicId) => {
