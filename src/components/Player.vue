@@ -42,7 +42,8 @@
             </div>
             <div class="playing-lyric-wrapper">
               <div class="playing-lyric">
-                {{ playingLyric }}
+                <!-- {{ playingLyric }} -->
+                {{ playingLyric || (currentLyric === null ? '' : '歌词加载中...') }}
               </div>
             </div>
           </div>
@@ -387,6 +388,7 @@ export default {
       // 防止歌词切换跳动
       if (this.currentLyric) {
         this.currentLyric.stop();
+        this.currentLyric = null;
       }
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
@@ -395,6 +397,8 @@ export default {
           this.gainLyric();
         }
       }, 1000);
+      this.currentLineNum = 0;
+      this.playingLyric = "";
     },
     audioSrc(newSrc, oldSrc) {
       console.log('音频源变化:', {
