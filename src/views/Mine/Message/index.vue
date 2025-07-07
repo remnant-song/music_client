@@ -4,7 +4,7 @@
     <div class="messageList">
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item
-          v-for="(item, index) in allMessage"
+          v-for="(item, index) in allMessage.slice().reverse()"
           :key="item.id"
           :name="index + 1"
           class="minHeight message-card"

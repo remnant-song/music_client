@@ -11,17 +11,19 @@
         <div>
           <el-image class="songListImg" :src="listMessage.image"></el-image>
         </div>
-        <div class="briefInfo">
-          <span style="display: block; margin-bottom: 10px; margin-top: 20px"
-            ><b>创作者：</b>{{ listMessage.username }}</span
-          >
-          <span class="describe"
-            ><strong>描述：</strong><span>{{ listMessage.message }}</span></span
-          >
+        <div class="briefInfoWithBtn">
+          <div class="briefInfo">
+            <span style="display: block; margin-bottom: 10px; margin-top: 20px">
+              <b>创作者：</b>{{ listMessage.username }}
+            </span>
+            <span class="describe">
+              <strong>描述：</strong><span>{{ listMessage.message }}</span>
+            </span>
+          </div>
+          <el-button class="addBtn" @click="addBtn" size="mini">添加歌曲</el-button>
         </div>
       </div>
       <div class="listMain">
-        <el-button class="addBtn" @click="addBtn" size="mini">添加歌曲</el-button>
         <div class="songList">
           <ul>
             <li v-for="(item, index) in musicList" :key="item.musicId">
@@ -73,9 +75,9 @@ export default {
     addBtn() {
       this.$refs.addMusicRef.open(this.$route.params.listId);
     },
-    // 返回
+    // 返回到创建歌单页面
     goBack() {
-      this.$router.back();
+      this.$router.push('/mine/createSongList');
     },
     deleteMusic(songId) {
       this.$confirm("确定要移除这个歌曲吗？", "提示", {
@@ -105,71 +107,94 @@ export default {
 .create-songlist-main-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
-  position: relative;
-  overflow-x: hidden;
-  touch-action: pan-y;
+  padding-bottom: 40px;
+  display: flex;
+  align-items: flex-start;   /* 顶部对齐 */
+  justify-content: center;
 }
-
 .create-songlist-content {
   max-width: 480px;
   width: 100%;
-  margin: 0 auto;
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 80px;
-  bottom: 20px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0 10px;
-  box-sizing: border-box;
-  touch-action: pan-y;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10);
+  padding: 24px 18px 32px 18px;
+  overflow: visible;
+  margin-top: 32px;   /* 距离导航栏更近 */
 }
-
-/* 移除旧的导航栏样式 */
 .songListTitle {
-  height: 160px;
-  padding: 0 12px;
   display: flex;
   align-items: center;
-  background-color: rgb(248, 248, 248);
-  margin-bottom: 20px;
-  border-radius: 16px;
+  flex-wrap: nowrap;
+  background: #f3f6fd;
+  border-radius: 18px;
+  padding: 18px 12px;
+  margin-bottom: 18px;
   .songListImg {
     width: 110px;
     height: 110px;
     border-radius: 20px;
+    box-shadow: 0 2px 16px rgba(99,102,241,0.12);
+    background: #f3f4f6;
+    flex-shrink: 0;
   }
-  .briefInfo {
-    margin-left: 15px;
-    .describe {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      line-height: 1.5;
+  .briefInfoWithBtn {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 18px;
+    min-width: 0;
+    .briefInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      flex: 1;
+      .describe {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        line-height: 1.5;
+        color: #6366f1;
+        font-size: 15px;
+        word-break: break-all;
+      }
+      span {
+        color: #6366f1;
+        font-size: 16px;
+        font-weight: bold;
+        word-break: break-all;
+      }
+    }
+    .addBtn {
+      margin-left: 24px;
+      background: linear-gradient(90deg, #4FC3F7 0%, #6366f1 100%);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .addBtn:hover {
+      background: linear-gradient(90deg, #6366f1 0%, #4FC3F7 100%);
     }
   }
 }
 .listMain {
-  padding-bottom: 30px;
-  padding: 10px 20px 25px;
-  background-color: rgb(248, 248, 248);
+  background: #f8fafc;
   border-radius: 16px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  touch-action: pan-y;
-  .addBtn {
-    float: right;
-    margin-top: 5px;
-    margin-right: 20px;
-  }
+  padding: 18px 12px 10px 12px;
+  margin-top: 10px;
   .songList {
     margin-top: 10px;
+    background: #f5f7fa;
+    border-radius: 16px;
+    padding-bottom: 8px;
     ul {
       padding-left: 0;
-      padding-top: 10px;
+      padding-top: 0;
     }
     li {
       padding: 0 15px;
@@ -178,23 +203,40 @@ export default {
       height: 50px;
       line-height: 50px;
       border-radius: 20px;
-      background-color: #fff;
-      margin-top: 20px;
-      .deleteIcon {
-        float: right;
-        font-size: 20px;
-        margin-top: 15px;
-      }
+      background-color: #fafdff;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.04);
+      transition: box-shadow 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    li:first-child {
+      margin-top: 0;
+    }
+    li:hover {
+      background: #eaf6ff;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.10);
+    }
+    .deleteIcon {
+      color: #ff6b81;
+      font-size: 22px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .deleteIcon:hover {
+      color: #d32f2f;
     }
   }
 }
-
-/* 响应式设计 */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .create-songlist-content {
-    padding: 0 10px;
-    width: calc(100% - 20px);
-    max-width: calc(100% - 20px);
+    max-width: 98vw;
+    padding: 10px 2vw 20px 2vw;
+    top: 60px;
   }
+
 }
 </style>
