@@ -92,8 +92,8 @@
               {{ format(currentSong.timelength) }}
             </span>
             <div class="star">
-              <el-icon v-if="isLike" style="color: crimson" @click.stop="handleStar(currentSong.musicId)"><StarFilled /></el-icon>
-              <el-icon v-else style="color: #fff" @click.stop="handleStar(currentSong.musicId)"><Star /></el-icon>
+              <el-icon v-if="isLike" @click.stop="handleStar(currentSong.musicId)" :class="{ 'is-like': isLike }"><StarFilled /></el-icon>
+              <el-icon v-else @click.stop="handleStar(currentSong.musicId)"><Star /></el-icon>
             </div>
           </div>
           <div class="operators">
@@ -813,8 +813,30 @@ export default {
   margin-left: 20px;
   display: inline-block;
 }
-.starIcon {
-  font-size: 30px;
+.star :deep(.el-icon) {
+  font-size: 26px !important;
+  color: #1976d2;
+  transition: color 0.2s, transform 0.2s;
+}
+.star :deep(.el-icon svg) {
+  fill: transparent;
+  stroke: #1976d2;
+  stroke-width: 2px;
+  transition: fill 0.2s, stroke 0.2s;
+}
+/* 已收藏：实心星，蓝色填充无描边 */
+.star :deep(.el-icon.is-like) svg {
+  fill: #1976d2 !important;
+  stroke: none !important;
+}
+.star :deep(.el-icon.is-active),
+.star :deep(.el-icon):active {
+  color: #4FC3F7 !important;
+}
+.star :deep(.el-icon.is-active svg),
+.star :deep(.el-icon):active svg {
+  fill: #4FC3F7;
+  stroke: #4FC3F7;
 }
 .player .normal-player {
   position: fixed;
