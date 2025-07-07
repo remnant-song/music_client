@@ -55,7 +55,7 @@
           <div class="song-number">{{ index + 1 }}</div>
           <div class="song-info">
             <h4 class="song-name">{{ item.musicName }}</h4>
-            <p class="song-artist">{{ item.artist || '未知歌手' }}</p>
+            <p class="song-artist">{{ item.userName || '未知歌手' }}</p>
           </div>
           <div class="song-action">
             <el-icon class="play-icon"><VideoPlay /></el-icon>
