@@ -17,7 +17,7 @@
           <div class="stats-actions">
             <div class="action-content">
               <h3 class="action-title">创建歌单</h3>
-              <p class="action-subtitle">管理你的音乐收藏</p>
+              <p class="action-subtitle">管理音乐收藏</p>
             </div>
           </div>
           <el-icon
@@ -413,7 +413,7 @@ export default {
 }
 
 .stats-label {
-  font-size: 0.28rem;
+  font-size: 0.224rem; /* 原0.28rem，缩小20% */
   color: #6366f1;
   margin: 0;
   opacity: 0.8;
@@ -448,12 +448,12 @@ export default {
 
 
 .add-icon {
-  font-size: 24px;
+  font-size: 19.2px; /* 原24px，缩小20% */
   color: #6366f1;
   opacity: 0.8;
   transition: all 0.3s ease;
   cursor: pointer;
-  padding: 12px;
+  padding: 9.6px; /* 原12px，缩小20% */
   border-radius: 50%;
   background: rgba(99, 102, 241, 0.1);
   
