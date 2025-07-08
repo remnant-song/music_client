@@ -301,16 +301,28 @@ export default {
   line-height: 100px;
   border: 1px dashed #bfcfff;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
   .headImage {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     background: #f8fafc;
     border: 2.5px solid #e0e7ff;
+    object-fit: cover;
+    display: block;
   }
   .uploadIcon {
-    font-size: 24px;
+    font-size: 32px;
     color: #bfcfff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
 }
 .mine-username {
@@ -402,8 +414,23 @@ export default {
     width: 70px;
     height: 70px;
     line-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
     .headImage {
       border-width: 1.5px;
+      object-fit: cover;
+      display: block;
+    }
+    .uploadIcon {
+      font-size: 22px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
   .mine-username {
