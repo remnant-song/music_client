@@ -50,6 +50,15 @@ export function createSongList(name, image, message, tags) {
   });
 }
 
+
+// 更新歌单信息
+export function updateSongList(id, name, image, message, tags) {
+  return request({
+    url: "/songList/update",
+    method: "post",
+    data: { id, name, image, message, tags },
+  });
+}
 // 删除歌单
 export function deleteSongList(listId) {
   return request({

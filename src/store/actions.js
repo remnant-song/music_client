@@ -35,7 +35,7 @@ import{getAllMessage} from "../api/message";
 import{settingUserInfo} from "../api/mine";
 import{editPassword} from "../api/login";
 import { getMainRecommendList } from "@/api/rank";
-
+import{updateSongList} from "../api/mine";
 function findIndex(list, song) {
     return list.findIndex((item) => {
       return item.id === song.id;
@@ -305,6 +305,30 @@ export const createMusicList = ({ _ }, addForm) => {
   });
 };
 
+// 更新歌单信息
+export const updateMusicList = ({ dispatch }, updateForm) => {
+  return updateSongList(
+    updateForm.id,
+    updateForm.name,
+    updateForm.image,
+    updateForm.message,
+    updateForm.tags
+  ).then((res) => {
+    if (res.code == 200 || res.code == "20") {
+      ElMessage({
+        type: "success",
+        message: "歌单更新成功",
+      });
+      // 更新后刷新歌单详情
+      dispatch("gainSongListDetail", updateForm.id);
+    } else {
+      ElMessage.error(res.msg || "歌单更新失败");
+    }
+    return res;
+  }).catch(() => {
+    ElMessage.error("歌单更新失败");
+  });
+};
 // 删除歌单
 export const deleteMusicList = ({ commit }, listId) => {
   deleteSongList(listId).then((res) => {
