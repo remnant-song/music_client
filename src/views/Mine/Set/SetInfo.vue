@@ -31,7 +31,22 @@
         </div>
         <h3 class="user-name">{{ userMessage.username || '未设置昵称' }}</h3>
       </div>
-
+      <!-- 裁剪弹窗 -->
+      <el-dialog v-model="cropperVisible" title="裁剪头像" width="400px">
+        <cropper
+          :src="cropperImg"
+          :stencil-props="{ aspectRatio: 1 }"
+          :autoZoom="true"
+          :resizeImage="true"
+          :image-restriction="'stencil'"
+          ref="cropper"
+          style="height: 300px; width: 100%;"
+        />
+        <template #footer>
+          <el-button @click="cropperVisible = false">取消</el-button>
+          <el-button type="primary" @click="cropAndUpload">确定</el-button>
+        </template>
+      </el-dialog>
       <!-- 个人资料设置 -->
       <div class="form-container">
         <div class="form-header">
@@ -102,9 +117,11 @@ import { get } from "lodash-es";
 import { Camera, Check } from '@element-plus/icons-vue';
 import rules from "../../../utils/validator";
 import PageHeader from '@/components/PageHeader.vue';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 export default {
-  components: { Camera, Check, PageHeader },
+  components: { Camera, Check, PageHeader, Cropper },
   data() {
     return {
       userMessage: {
@@ -116,6 +133,8 @@ export default {
       rules, // 封装好的表单验证
       saving: false,
       actionUrl: "/upload/upImage", // 上传图片的目的地址
+      cropperVisible: false,
+      cropperImg: '',
     };
   },
   mounted() {
@@ -155,6 +174,12 @@ export default {
     handleUploadSuccess(res) {
       this.$message.success("头像上传成功");
       this.$store.dispatch("setHeadPic", res.data.url);
+      // 立即更新localStorage中的userInfo
+      let userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
+      userInfo.imageUrl = res.data.url;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      // 触发视图刷新
+      this.$forceUpdate && this.$forceUpdate();
       setTimeout(() => {
         this.$store.dispatch("gainUserInfo");
       }, 300);
@@ -177,14 +202,45 @@ export default {
           message:
             "请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片",
         });
+        return false;
       }
       if (!isLt2M) {
         this.$notify.warning({
           title: "警告",
           message: "图片大小必须小于2M",
         });
+        return false;
       }
-      return isJPG && isLt2M;
+      // 打开裁剪弹窗
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.cropperImg = e.target.result;
+        this.cropperVisible = true;
+      };
+      reader.readAsDataURL(file);
+      return false; // 阻止 el-upload 自动上传
+    },
+    // 裁剪并上传
+    cropAndUpload() {
+      const cropper = this.$refs.cropper;
+      if (cropper && cropper.getResult) {
+        const result = cropper.getResult();
+        if (result && result.canvas) {
+          result.canvas.toBlob((blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'avatar.png');
+            this.$http.post(this.actionUrl, formData)
+              .then(res => {
+                this.handleUploadSuccess(res.data);
+                this.cropperVisible = false;
+              })
+              .catch(() => {
+                this.handleUploadError();
+                this.cropperVisible = false;
+              });
+          }, 'image/png');
+        }
+      }
     },
   },
 };

@@ -27,6 +27,22 @@
         <el-button @click="login" v-else plain size="small">登录</el-button>
       </span>
     </div>
+    <!-- 裁剪弹窗 -->
+    <el-dialog v-model="cropperVisible" title="裁剪头像" width="400px">
+      <cropper
+        :src="cropperImg"
+        :stencil-props="{ aspectRatio: 1 }"
+        :autoZoom="true"
+        :resizeImage="true"
+        :image-restriction="'stencil'"
+        ref="cropper"
+        style="height: 300px; width: 100%;"
+      />
+      <template #footer>
+        <el-button @click="cropperVisible = false">取消</el-button>
+        <el-button type="primary" @click="cropAndUpload">确定</el-button>
+      </template>
+    </el-dialog>
     <!-- 列表 -->
     <div class="mine-list-wrapper">
       <div
@@ -69,6 +85,8 @@ import {
 } from '@element-plus/icons-vue';
 import path from "path-browserify";
 import { mapState } from "vuex";
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 export default {
   inject: ["reload"],
@@ -80,7 +98,8 @@ export default {
     CirclePlus,
     Message,
     Setting,
-    ArrowRight
+    ArrowRight,
+    Cropper,
   },
   data() {
     return {
@@ -117,6 +136,8 @@ export default {
        },
       ],
       actionUrl: "/upload/upImage", // 上传图片的目的地址
+      cropperVisible: false,
+      cropperImg: '',
     };
   },
   mounted() {
@@ -136,13 +157,9 @@ export default {
       if (localStorage.getItem("token")) {
         this.$router
           .push({
-            // path: `/mine/list/${item.value}/${item.title}`,
              path: `/mine/list/${item.value}/${item.title}`,
-            // consolelog(path)
           })
           .then(() => {
-            // console.log(`已跳转到：+${item.value}/${item.title}`);
-            // this.$message.success(`正在跳转到 ${item.title}`);
             if (item.id == 4) {
               this.$store.dispatch("modifyAllMsgRead");
               setTimeout(() => {
@@ -172,12 +189,9 @@ export default {
             localStorage.removeItem("token");
             localStorage.removeItem("userInfo");
             this.$message.warning("已退出登录");
-            // 刷新整个页面，可以移除头像和用户名（缺点：页面会闪一下）
-            // this.$router.go(0);
-            // 刷新整个页面，可以移除头像和用户名（页面不会闪）
             this.reload();
           })
-          .catch((err) => {}); // 需要添加错误捕获，否则报错
+          .catch((err) => {});
       } else {
         ElMessage({
           type: "warning",
@@ -185,21 +199,7 @@ export default {
         });
       }
     },
-    //选择完图片后自动上传，并拿到服务器返回的图片url地址
-    handleUploadSuccess(res) {
-      this.$store.dispatch("setHeadPic", res.data.url);
-      // 增加延时，先执行异步上传，再刷新页面
-      setTimeout(() => {
-        this.$store.dispatch("gainUserInfo");
-      }, 300);
-      setTimeout(() => {
-        this.reload();
-      }, 500);
-    },
-    handleUploadError() {
-      this.$message.error("上传失败，请重试");
-    },
-    // 对上传的文件类型及大小进行限制
+    //选择完图片后弹出裁剪框
     beforeImgUpload(file) {
       const isJPG =
         file.type === "image/jpeg" ||
@@ -213,14 +213,57 @@ export default {
           message:
             "请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片",
         });
+        return false;
       }
       if (!isLt2M) {
         this.$notify.warning({
           title: "警告",
           message: "图片大小必须小于2M",
         });
+        return false;
       }
-      return isJPG && isLt2M;
+      // 打开裁剪弹窗
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.cropperImg = e.target.result;
+        this.cropperVisible = true;
+      };
+      reader.readAsDataURL(file);
+      return false; // 阻止 el-upload 自动上传
+    },
+    // 裁剪并上传
+    cropAndUpload() {
+      const cropper = this.$refs.cropper;
+      if (cropper && cropper.getResult) {
+        const result = cropper.getResult();
+        if (result && result.canvas) {
+          result.canvas.toBlob((blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'avatar.png');
+            this.$http.post(this.actionUrl, formData)
+              .then(res => {
+                this.handleUploadSuccess(res.data);
+                this.cropperVisible = false;
+              })
+              .catch(() => {
+                this.handleUploadError();
+                this.cropperVisible = false;
+              });
+          }, 'image/png');
+        }
+      }
+    },
+    handleUploadSuccess(res) {
+      this.$store.dispatch("setHeadPic", res.data.url);
+      setTimeout(() => {
+        this.$store.dispatch("gainUserInfo");
+      }, 300);
+      setTimeout(() => {
+        this.reload();
+      }, 500);
+    },
+    handleUploadError() {
+      this.$message.error("上传失败，请重试");
     },
     // 未登录提示
     loadingTips() {
@@ -231,6 +274,7 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 .mine-main-container {
   max-width: 480px;

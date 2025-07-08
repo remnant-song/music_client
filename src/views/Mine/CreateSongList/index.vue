@@ -158,6 +158,22 @@
           </div>
         </template>
       </el-dialog>
+      <!-- 裁剪弹窗 -->
+      <el-dialog v-model="cropperVisible" title="裁剪封面" width="400px">
+        <cropper
+          :src="cropperImg"
+          :stencil-props="{ aspectRatio: 1 }"
+          :autoZoom="true"
+          :resizeImage="true"
+          :image-restriction="'stencil'"
+          ref="cropper"
+          style="height: 300px; width: 100%;"
+        />
+        <template #footer>
+          <el-button @click="cropperVisible = false">取消</el-button>
+          <el-button type="primary" @click="cropAndUpload">确定</el-button>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -165,9 +181,11 @@
 <script>
 import { mapState } from "vuex";
 import { Plus, Delete, FolderAdd, Picture } from '@element-plus/icons-vue';
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 export default {
-  components: { Plus, Delete, FolderAdd, Picture },
+  components: { Plus, Delete, FolderAdd, Picture, Cropper },
   inject: ["reload"],
   name: "",
   data() {
@@ -180,6 +198,8 @@ export default {
         tags: "",
       },
       actionUrl: "/upload/upImage", // 上传图片的目的地址
+      cropperVisible: false,
+      cropperImg: '',
     };
   },
   mounted() {
@@ -221,7 +241,7 @@ export default {
     handleUploadError() {
       this.$message.error("上传失败，请重试");
     },
-    // 对上传的文件类型及大小进行限制
+    // 对上传的文件类型及大小进行限制，并弹出裁剪框
     beforeImgUpload(file) {
       const isJPG =
         file.type === "image/jpeg" ||
@@ -235,14 +255,45 @@ export default {
           message:
             "请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片",
         });
+        return false;
       }
       if (!isLt2M) {
         this.$notify.warning({
           title: "警告",
           message: "图片大小必须小于2M",
         });
+        return false;
       }
-      return isJPG && isLt2M;
+      // 打开裁剪弹窗
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.cropperImg = e.target.result;
+        this.cropperVisible = true;
+      };
+      reader.readAsDataURL(file);
+      return false; // 阻止 el-upload 自动上传
+    },
+    // 裁剪并上传
+    cropAndUpload() {
+      const cropper = this.$refs.cropper;
+      if (cropper && cropper.getResult) {
+        const result = cropper.getResult();
+        if (result && result.canvas) {
+          result.canvas.toBlob((blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'cover.png');
+            this.$http.post(this.actionUrl, formData)
+              .then(res => {
+                this.handleUploadSuccess(res.data);
+                this.cropperVisible = false;
+              })
+              .catch(() => {
+                this.handleUploadError();
+                this.cropperVisible = false;
+              });
+          }, 'image/png');
+        }
+      }
     },
     // 删除歌单
     deleteSongList(listId) {
