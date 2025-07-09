@@ -56,7 +56,7 @@
             <div class="lyric-wrapper">
               <div v-if="currentLyric">
                 <p
-                  :ref="setLyricLineRef"
+                  :ref="el => setLyricLineRef(el, index)"
                   class="text"
                   v-for="(line, index) in currentLyric.lines"
                   :key="line.key"
@@ -152,7 +152,7 @@
       </div>
     </transition>
     <audio
-      v-if="hasValidAudio"
+      v-if="hasValidAudio"       
       ref="audio"
       @play="ready"
       @error="error"
@@ -171,6 +171,8 @@
   </div>
 </template>
 <script>
+//mapGetters: 用于从 Vuex store 中获取计算属性（getters），如 currentSong、playList 等。
+//mapMutations: 用于调用 Vuex store 中的 mutations，如修改播放状态 SET_PLAYING_STATE。
 import { mapGetters, mapMutations } from "vuex";
 import { prefixStyle } from "../common/dom";
 import ProgressBar from "/src/components/ProgressBar.vue";
@@ -185,6 +187,7 @@ import { getSongDetailByMusicId } from "../api/songlist";
 import { getLyric } from "../api/common";
 import { ArrowLeft, Star, StarFilled, CaretLeft, CaretRight, VideoPause, VideoPlay, Refresh, Sort, Shuffle } from '@element-plus/icons-vue';
 import { BASE_API } from '../common/config';
+//处理浏览器兼容性
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
 export default {
@@ -201,6 +204,9 @@ export default {
       lyricLineRefs: [],
       lyricUrl: "", // 歌词地址
       isLike: false, // 歌曲收藏状态
+      // 新增
+      audioReady: false, // 音频是否加载完成
+      lyricReady: false, // 歌词是否加载完成
     };
   },
   components: {
@@ -219,12 +225,13 @@ export default {
     Sort,
     Shuffle,
   },
-  // 滑动touch
+  // 滑动touch，典型的 播放器手势交互基础设置，结合后续的触摸事件方法实现滑动切换功能。
   created() {
     console.log(transform)
     console.log(transitionDuration)
     this.touch = {};
   },
+  //mounted 生命周期钩子，主要做了两件事：监听浏览器返回按钮事件，初始化音频源
   mounted() {
     // 监听浏览器返回按钮，当在播放界面时关闭播放界面
     window.addEventListener('popstate', this.handlePopState);
@@ -236,28 +243,39 @@ export default {
       }
     });
   },
+  //在组件销毁前移除之前添加的浏览器返回按钮事件监听器，防止内存泄漏和其他潜在问题。
   beforeUnmount() {
     // 移除事件监听器
     window.removeEventListener('popstate', this.handlePopState);
   },
 
   // 填充歌曲信息 控制歌曲播放
+  //计算属性（Computed Properties），而不是普通的方法（Methods）
   computed: {
     cdCls() {
+      //如果暂停 (this.playing === false)，返回 "pause"，CD 停止旋转。
+      //如果正在播放 (this.playing === true)，返回 "play"，CD 会旋转（通过 CSS 动画）。
       return this.playing ? "play" : "pause";
     },
     playIcon() {
+      //播放时显示暂停图标 ("icon-pause")。
+      //暂停时显示播放图标 ("icon-play")。
       return this.playing ? "icon-pause" : "icon-play";
     },
     miniIcon() {
+      //迷你播放器（底部小播放条）的播放/暂停图标类名。
       return this.playing ? "icon-pause-mini" : "icon-play-mini";
     },
     disableCls() {
-      return this.songReady ? "" : "disable";
+      //如果歌曲未加载完成 (this.songReady === false)，返回 "disable"，按钮会变灰不可点击。
+      //如果已加载 (this.songReady === true)，返回空字符串 ""，按钮正常。
+      return this.hasValidAudio ? "" : "disable";
     },
     percent() {
+      //计算当前播放进度的百分比（0 到 1 之间）。
       return this.currentTime / this.currentSong.timelength;
     },
+    // 播放模式图标
     iconMode() {
       return this.mode === playMode.sequence
         ? "icon-sequence"
@@ -265,6 +283,7 @@ export default {
         ? "icon-loop"
         : "icon-random";
     },
+    //动态返回不同播放模式对应的 SVG 图标。
     modeIcon() {
       switch (this.mode) {
         case playMode.sequence: return require('@/assets/image/orader.svg');
@@ -285,7 +304,7 @@ export default {
         currentSongMusicId: currentSong?.musicId
       });
       
-      // 如果详情中有完整信息，使用详情
+      // 3. 检查是否可合并（ID匹配且详情存在）合并
       if (songDetail && songDetail.musicId === currentSong.musicId) {
         const mergedSong = { ...currentSong, ...songDetail };
         console.log('合并后的歌曲信息:', mergedSong);
@@ -325,6 +344,7 @@ export default {
       console.log('处理后的URL:', finalUrl);
       return finalUrl;
     },
+    //资源可用性验证 的典型实现，确保后续操作（如播放）仅在数据完备时执行。
     hasValidAudio() {
       const hasSong = !!this.fullCurrentSong;
       const hasMusicUrl = !!(this.fullCurrentSong && this.fullCurrentSong.musicUrl);
@@ -350,6 +370,10 @@ export default {
       if (newSong === oldSong) {
         return;
       }
+      
+      // 新增：切歌时重置加载状态
+      this.audioReady = false;
+      this.lyricReady = false;
       
       console.log('当前歌曲变化:', {
         newSong,
@@ -393,8 +417,8 @@ export default {
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         if (this.$refs.audio) {
-          this.$refs.audio.play();
-          this.gainLyric();
+          // this.$refs.audio.play(); // 不再直接play
+          this.gainLyric(); // 只加载歌词
         }
       }, 1000);
       this.currentLineNum = 0;
@@ -407,6 +431,7 @@ export default {
         currentSong: this.currentSong
       });
     },
+    //当播放状态 (playing) 变化时，控制音频的播放/暂停。
     playing(newPlaying) {
       const audio = this.$refs.audio;
       this.$nextTick(() => {
@@ -417,6 +442,7 @@ export default {
     },
   },
   methods: {
+    //处理歌曲收藏/取消收藏的逻辑
     handleStar(musicId) {
       if (localStorage.getItem("token")) {
         this.currentSong.isLike = !this.currentSong.isLike;
@@ -434,6 +460,7 @@ export default {
     onProgressBarChange(percent) {
       const currentTime = this.currentSong.timelength * percent;
       this.$refs.audio.currentTime = currentTime;
+      // 如果暂停了，就播放
       if (!this.playing) {
         this.togglePlaying();
       }
@@ -442,19 +469,24 @@ export default {
         this.currentLyric.seek(currentTime * 1000);
       }
     },
-    setLyricLineRef(el) {
-      this.lyricLineRefs.push(el);
+    //将歌词行的DOM元素动态存入数组，用于后续歌词滚动定位。
+    setLyricLineRef(el, index) {
+      if (el) {
+        this.lyricLineRefs[index] = el;
+      }
     },
+    //updateTime(e) - 播放时间更新
     updateTime(e) {
       this.currentTime = e.target.currentTime;
     },
-    // 格式化时间
+    // 将秒数格式化为 MM:SS 的显示格式（如 125 → "02:05"）。
     format(interval) {
       interval = interval | 0;
       const minute = (interval / 60) | 0;
       const second = this._pad(interval % 60);
       return `${minute}:${second}`;
     },
+    //将数字转换为指定位数的字符串，不足位时前面补零。
     _pad(num, n = 2) {
       let len = num.toString().length;
       while (len < n) {
@@ -468,6 +500,8 @@ export default {
       getLyric(this.lyricUrl)
         .then((res) => {
           this.currentLyric = new Lyric(res.data, this.handleLyric);
+          this.lyricReady = true; // 歌词加载完成
+          this.tryPlay();         // 尝试播放
           if (this.playing) {
             this.currentLyric.play();
           }
@@ -476,22 +510,28 @@ export default {
           this.currentLyric = null;
           this.currentLineNum = 0;
           this.playingLyric = "";
+          this.lyricReady = true; // 歌词加载失败也允许播放
         });
     },
 
+    //歌词滚动和高亮同步
     handleLyric({ lineNum, txt }) {
       this.currentLineNum = lineNum;
       if (lineNum > 5) {
         let lineEl = this.lyricLineRefs[lineNum - 5];
-        this.$refs.lyriclist.scrollToElement(lineEl, 1000);
+        if (lineEl) {
+          this.$refs.lyriclist.scrollToElement(lineEl, 1000);
+        }
       } else {
         this.$refs.lyriclist.scrollTo(0, 0, 1000);
       }
       this.playingLyric = txt;
     },
-    // 防止快速点击 产生错误
+    //标记音频已加载完成，可以安全播放。
     ready() {
       this.songReady = true;
+      this.audioReady = true; // 音频加载完成
+      this.tryPlay();         // 尝试播放
       console.log('音频加载成功:', this.audioSrc);
     },
     error(e) {
@@ -509,6 +549,7 @@ export default {
       console.log('音频开始加载:', this.audioSrc);
     },
     onCanPlay() {
+      this.audioReady = true;
       console.log('音频可以播放:', this.audioSrc);
     },
     onLoadError(e) {
@@ -638,13 +679,20 @@ export default {
         return;
       }
       this.setPlayingState(!this.playing);
-
       // 歌词随着歌曲播放暂停而滚动或暂停滚动
       if (this.currentLyric) {
         this.currentLyric.togglePlay();
       }
+      // 强制播放audio，兼容浏览器自动播放策略
+      if (this.$refs.audio) {
+        this.$refs.audio.play().catch((err) => {
+          console.warn('浏览器限制自动播放，需用户手动操作', err);
+          this.$message.warning('浏览器限制自动播放，请点击播放按钮');
+        });
+      }
     },
 
+    //通过触摸手势滑动切换歌词和CD封面
     middleTouchStart(e) {
       this.touch.initiated = true;
       // 用来判断是否是一次移动
@@ -763,7 +811,7 @@ export default {
     },
     // vue transition 动画钩子结束
 
-    // 获取动画起始位置
+    // 获取动画起始位置，大页面变成小页面的动画
     _getPosAndScale() {
       // 左下角小图片初始位置
       const targetWidth = 40;
@@ -801,6 +849,16 @@ export default {
         case playMode.random: msg = '随机播放'; break;
       }
       this.$message.success(`已切换为${msg}`);
+    },
+    // 新增：只有歌词和音频都加载完才播放
+    tryPlay() {
+      console.log('tryPlay', this.audioReady, this.lyricReady, this.$refs.audio);
+      if (this.audioReady && this.lyricReady && this.$refs.audio) {
+        this.$refs.audio.play();
+        if (this.currentLyric && this.playing) {
+          this.currentLyric.play();
+        }
+      }
     },
   },
   beforeUpdate() {
