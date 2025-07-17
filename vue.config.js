@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 const path = require('path')
 
 // 提取后端服务器地址到变量
-const BACKEND_HOST = 'http://192.168.2.5'
+const BACKEND_HOST = 'http://192.168.53.208'
 // const BACKEND_HOST = process.env.VUE_APP_BASE_API;
 
 // 通用的代理配置函数
